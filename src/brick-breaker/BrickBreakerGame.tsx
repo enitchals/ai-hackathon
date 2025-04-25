@@ -19,7 +19,6 @@ const PADDLE_SPEED = 24; // px per key press or button tap
 const BALL_SPEED = 4; // px per frame
 
 const BrickBreakerGame: React.FC = () => {
-  const { themeName } = useThemeContext();
   const [paddleX, setPaddleX] = useState((BOARD_WIDTH - PADDLE_WIDTH) / 2);
   const [paddleTargetX, setPaddleTargetX] = useState((BOARD_WIDTH - PADDLE_WIDTH) / 2);
   const paddleXRef = useRef(paddleX);

@@ -59,7 +59,7 @@ function Gallery() {
           description: 'Break all the bricks! Classic arcade fun.',
           to: '/brick-breaker',
           preview: <img src={BrickBreakerImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
-        }].map((app, idx) => (
+        }].map((app) => (
           <Grid item xs={12} sm={6} md={4} key={app.title} display="flex" justifyContent="center">
             <Card sx={{ width: 260, height: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
               <CardActionArea component={Link} to={app.to} sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
