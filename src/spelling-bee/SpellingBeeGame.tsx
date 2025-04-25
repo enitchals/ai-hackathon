@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, TextField, Chip, Paper, Container } from '@mui/material';
-import AppHeader from './AppHeader';
+import AppHeader from '../components/AppHeader';
 
 // Dynamic imports for large word lists
 const pangramsPromise = import('../spelling-bee/pangrams.json');

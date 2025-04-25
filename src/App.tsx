@@ -6,7 +6,8 @@ import SnakeGame from './snake/SnakeGame';
 import WordleGame from './wordle/WordleGame';
 import ThemePickerModal from './ThemePickerModal';
 import { useThemeContext } from './ThemeContext';
-import SpellingBeeGame from './components/SpellingBeeGame';
+import SpellingBeeGame from './spelling-bee/SpellingBeeGame';
+import BrickBreakerGame from './brick-breaker';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -38,7 +39,7 @@ function Gallery() {
                   ADHDnD
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  A D&D-inspired to-do app for people with ADHD
+                  A D&D-inspired to-do adventure
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -86,6 +87,20 @@ function Gallery() {
             </CardActionArea>
           </Card>
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <Card>
+            <CardActionArea component={Link} to="/brick-breaker">
+              <CardContent>
+                <Typography variant="h5" component="h2" gutterBottom>
+                  Brick Breaker
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Break all the bricks! Classic arcade fun.
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
       </Grid>
       <ThemePickerModal
         open={themeModalOpen}
@@ -106,6 +121,7 @@ function App() {
         <Route path="/snake" element={<SnakeGame />} />
         <Route path="/wordle" element={<WordleGame />} />
         <Route path="/spelling-bee" element={<SpellingBeeGame />} />
+        <Route path="/brick-breaker" element={<BrickBreakerGame />} />
       </Routes>
     </Router>
   );
