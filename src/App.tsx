@@ -1,6 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Container, Typography, Box, Grid, Card, CardActionArea, CardContent } from '@mui/material';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Container, Typography, Box, Card, CardActionArea, CardContent, GridLegacy as Grid } from '@mui/material';
 import ADHDnDApp from './adhd-n-d/ADHDnDApp';
 
 function Gallery() {

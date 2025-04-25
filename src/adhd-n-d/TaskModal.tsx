@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import { Dialog, DialogContent, DialogActions, Button } from '@mui/material';
 import { TodoItem } from './TodoContext';
 
 interface TaskModalProps {

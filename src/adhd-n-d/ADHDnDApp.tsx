@@ -17,7 +17,6 @@ const ADHDnDInner: React.FC = () => {
   const { todoList, markDone, moveToEnd } = useTodo();
   const [selectedTask, setSelectedTask] = useState<TodoItem | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showBreakModal, setShowBreakModal] = useState(false);
   const [tab, setTab] = useState(0);
   const navigate = useNavigate();
   const [rollNumber, setRollNumber] = useState<number | null>(null);
@@ -39,7 +38,6 @@ const ADHDnDInner: React.FC = () => {
       const idx = (value - 1) % visible.length;
       setSelectedTask(visible[idx]);
       setShowTaskModal(true);
-      setShowBreakModal(false);
     }
   };
 
