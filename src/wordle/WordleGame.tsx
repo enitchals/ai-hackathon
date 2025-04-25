@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Typography } from '@mui/material';
 import AppHeader from '../components/AppHeader';
 import wordList from './words-5.json';
 
@@ -165,7 +165,7 @@ export default function WordleGame() {
           {!gameState.gameOver && renderRow(gameState.currentGuess)}
           {Array(MAX_GUESSES - gameState.guesses.length - (gameState.gameOver ? 0 : 1))
             .fill(0)
-            .map((_, i) => renderRow(''))}
+            .map(() => renderRow(''))}
         </Box>
 
         {gameState.gameOver && (

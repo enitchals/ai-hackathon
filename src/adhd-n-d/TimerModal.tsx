@@ -69,7 +69,9 @@ const TimerModal: React.FC<TimerModalProps> = ({ open, onClose, duration, label,
 
   function playBeep() {
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const _window = window as typeof window & { webkitAudioContext?: typeof AudioContext };
+      const AudioCtx = window.AudioContext || _window.webkitAudioContext;
+      const ctx = new AudioCtx();
       const o = ctx.createOscillator();
       const g = ctx.createGain();
       o.type = 'sine';
@@ -80,7 +82,9 @@ const TimerModal: React.FC<TimerModalProps> = ({ open, onClose, duration, label,
       o.start();
       o.stop(ctx.currentTime + 0.4);
       o.onended = () => ctx.close();
-    } catch {}
+    } catch {
+      // Ignore audio errors
+    }
   }
 
   return (

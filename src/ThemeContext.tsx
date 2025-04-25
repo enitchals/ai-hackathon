@@ -1,7 +1,30 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useMemo } from 'react';
-import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
+import { ThemeProvider, CssBaseline, createTheme, PaletteMode } from '@mui/material';
 
-export const THEMES: Record<string, any> = {
+// Theme names
+export const themes = [
+  'Bold Classic',
+  'Serene',
+] as const;
+export type Theme = typeof themes[number];
+
+// Define ThemeConfig type for the theme object if not already defined
+interface ThemeConfig {
+  palette: {
+    mode: PaletteMode;
+    primary: { main: string };
+    secondary: { main: string };
+    background: { default: string; paper: string };
+    text: { primary: string; secondary: string };
+    info: { main: string };
+    warning: { main: string };
+    error: { main: string };
+    success: { main: string };
+  };
+  components?: any;
+}
+
+export const THEMES: Record<string, ThemeConfig> = {
   'Bold Classic': {
     palette: {
       mode: 'light',
@@ -52,33 +75,33 @@ export const THEMES: Record<string, any> = {
   },
 };
 
+export const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error('useThemeContext must be used within a ThemeProvider');
+  return context;
+};
+
 interface ThemeContextType {
-  themeName: string;
-  setThemeName: (name: string) => void;
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  themeName: Theme;
+  setThemeName: (themeName: Theme) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({
-  themeName: 'Bold Classic',
-  setThemeName: () => {},
-});
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const useThemeContext = () => useContext(ThemeContext);
-
-export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
-  const [themeName, setThemeName] = useState(() => {
-    const saved = localStorage.getItem('themeName');
-    return saved || 'Bold Classic';
-  });
+export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [theme, setTheme] = useState<Theme>('Bold Classic');
 
   useEffect(() => {
-    localStorage.setItem('themeName', themeName);
-  }, [themeName]);
+    localStorage.setItem('themeName', theme);
+  }, [theme]);
 
-  const theme = useMemo(() => createTheme(THEMES[themeName]), [themeName]);
+  const themeObj = useMemo(() => createTheme(THEMES[theme]), [theme]);
 
   return (
-    <ThemeContext.Provider value={{ themeName, setThemeName }}>
-      <ThemeProvider theme={theme}>
+    <ThemeContext.Provider value={{ theme, setTheme, themeName: theme, setThemeName: setTheme }}>
+      <ThemeProvider theme={themeObj}>
         <CssBaseline />
         {children}
       </ThemeProvider>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Typography } from '@mui/material';
-import { THEMES } from './ThemeContext';
+import { THEMES, Theme } from './ThemeContext';
 
 export interface ThemePickerModalProps {
   open: boolean;
   onClose: () => void;
-  onSelectTheme: (themeName: string) => void;
-  selectedTheme: string;
+  onSelectTheme: (themeName: Theme) => void;
+  selectedTheme: Theme;
 }
 
 interface ThemeConfig {
@@ -21,6 +21,7 @@ interface ThemeConfig {
     error: { main: string };
     success: { main: string };
   };
+  components?: any;
 }
 
 const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSelectTheme, selectedTheme }) => {
@@ -28,7 +29,7 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSe
     console.log('Selecting theme:', name);
     console.log('Current selected theme:', selectedTheme);
     console.log('Available themes:', Object.keys(THEMES));
-    onSelectTheme(name);
+    onSelectTheme(name as Theme);
     onClose();
   };
 
@@ -53,20 +54,23 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSe
             <Box>
               <Typography variant="h6">{name}</Typography>
               <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                {Object.values((theme as ThemeConfig).palette).map((value: any) => 
-                  typeof value === 'object' && value.main ? (
-                    <Box 
-                      key={value.main} 
-                      sx={{ 
-                        width: 24, 
-                        height: 24, 
-                        bgcolor: value.main, 
-                        borderRadius: '50%', 
-                        border: '1px solid #ccc' 
-                      }} 
-                    />
-                  ) : null
-                )}
+                {Object.entries((theme as ThemeConfig).palette).map(([key, value]) => {
+                  if (typeof value === 'object' && value !== null && 'main' in value) {
+                    return (
+                      <Box
+                        key={key}
+                        sx={{
+                          width: 24,
+                          height: 24,
+                          bgcolor: (value as { main: string }).main,
+                          borderRadius: '50%',
+                          border: '1px solid #ccc',
+                        }}
+                      />
+                    );
+                  }
+                  return null;
+                })}
               </Box>
             </Box>
             <Button

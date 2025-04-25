@@ -32,7 +32,9 @@ function getInitialList(key: string): TodoItem[] {
   try {
     const raw = localStorage.getItem(key);
     if (raw) return JSON.parse(raw);
-  } catch {}
+  } catch {
+    // Ignore JSON parse/localStorage errors and return empty list
+  }
   return [];
 }
 

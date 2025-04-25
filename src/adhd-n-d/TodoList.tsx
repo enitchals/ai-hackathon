@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { List, ListItem, ListItemText, Typography, IconButton, Tooltip, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useTodo } from './TodoContext';
+import { useTodo, TodoItem } from './TodoContext';
 import { Box } from '@mui/material';
 import {
   DndContext,
@@ -9,6 +9,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -20,7 +21,13 @@ import { CSS } from '@dnd-kit/utilities';
 
 const MAX_VISIBLE = 19;
 
-function DraggableTodoItem({ item, idx, onRemove }: { item: any; idx: number; onRemove: (id: string) => void }) {
+interface DraggableTodoItemProps {
+  item: TodoItem;
+  idx: number;
+  onRemove: (id: string) => void;
+}
+
+function DraggableTodoItem({ item, idx, onRemove }: DraggableTodoItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
   return (
     <ListItem
@@ -61,11 +68,12 @@ const TodoList: React.FC = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (active.id !== over?.id) {
-      const oldIndex = visible.findIndex((item) => item.id === active.id);
-      const newIndex = visible.findIndex((item) => item.id === over.id);
+    if (!over) return;
+    if (String(active.id) !== String(over.id)) {
+      const oldIndex = visible.findIndex((item) => item.id === String(active.id));
+      const newIndex = visible.findIndex((item) => item.id === String(over.id));
       if (oldIndex !== -1 && newIndex !== -1) {
         const newVisible = arrayMove(visible, oldIndex, newIndex);
         // Merge reordered visible with hidden items (if any)
