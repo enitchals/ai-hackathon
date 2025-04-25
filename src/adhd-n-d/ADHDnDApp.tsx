@@ -13,6 +13,7 @@ import TaskModal from './TaskModal';
 import TimerModal from './TimerModal';
 import DoneList from './DoneList';
 import D20Image from './d20.png';
+import AppHeader from '../components/AppHeader';
 
 const MAX_VISIBLE = 19;
 
@@ -65,45 +66,25 @@ const ADHDnDInner: React.FC = () => {
   };
 
   return (
-    <Box textAlign="center" sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', py: 3 }}>
-      <Box display="flex" alignItems="center" mb={1} sx={{ maxWidth: 400, minWidth: '33vw', mx: 'auto', width: '100%', position: 'relative' }}>
-        <Tooltip title="Back to Gallery">
-          <IconButton onClick={() => navigate('/')} size="large" sx={{ position: 'absolute', left: 0 }}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Tooltip>
-        <Box flex={1} display="flex" justifyContent="center" alignItems="center">
-          <Typography variant="h4" component="h2" gutterBottom textAlign="center">
-            ADHDnD
-          </Typography>
-        </Box>
-        <Tooltip title="Change Theme">
-          <IconButton onClick={() => setThemeModalOpen(true)} size="large" sx={{ position: 'absolute', right: 0 }}>
-            <ColorLensIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-      <Box sx={{ maxWidth: 600, minWidth: '33vw', mx: 'auto', mb: 2, flex: '1 1 0', display: 'flex', flexDirection: 'column', minHeight: 0, width: '100%' }}>
-        <Tabs value={tab} onChange={(_, v) => setTab(v)} centered>
-          <Tab label="To-Do" />
-          <Tab label="Done" />
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <AppHeader title="ADHDnD">
+        <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)}>
+          <Tab label="Tasks" />
+          <Tab label="Completed" />
         </Tabs>
-        <Paper elevation={2} sx={{ p: 2, mt: 1, flex: '1 1 0', display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
-          {tab === 0 ? (
-            <>
-              <D20Roller onRoll={handleRoll} />
-              <AddTodoForm />
-              <Box sx={{ flex: '1 1 0', minHeight: 0, overflowY: 'auto', mt: 2 }}>
-                <TodoList />
-              </Box>
-            </>
-          ) : (
-            <Box sx={{ flex: '1 1 0', minHeight: 0, overflowY: 'auto' }}>
-              <DoneList />
-            </Box>
-          )}
-        </Paper>
+      </AppHeader>
+      
+      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2 }}>
+        {tab === 0 ? (
+          <>
+            <AddTodoForm />
+            <TodoList />
+          </>
+        ) : (
+          <DoneList />
+        )}
       </Box>
+
       <Box mt={2}>
         <Button variant="outlined" color="primary" onClick={() => handleTakeBreak(300)} sx={{ mr: 1 }}>Take a 5-min Break</Button>
         <Button variant="outlined" color="primary" onClick={() => handleTakeBreak(600)} sx={{ mr: 1 }}>10-min</Button>

@@ -2,6 +2,7 @@ import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Container, Typography, Box, Card, CardActionArea, CardContent, GridLegacy as Grid, Button } from '@mui/material';
 import { useState } from 'react';
 import ADHDnDApp from './adhd-n-d/ADHDnDApp';
+import SnakeGame from './snake/SnakeGame';
 import ThemePickerModal from './ThemePickerModal';
 import { useThemeContext } from './main';
 
@@ -27,20 +28,47 @@ function Gallery() {
         </Button>
         <Grid container spacing={2} justifyContent="center" sx={{ mt: 2 }}>
           <Grid item xs={12} sm={6}>
-            <Card sx={{ background: '#FFD046', color: '#241E4E', boxShadow: 3 }}>
+            <Card sx={{ 
+              background: 'primary.light', 
+              color: 'common.black', 
+              boxShadow: 3,
+              '&:hover': {
+                background: 'primary.main'
+              }
+            }}>
               <CardActionArea component={Link} to="/adhd-n-d">
                 <CardContent>
                   <Typography variant="h5" component="div">
                     ADHD+D
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2">
                     A playful to-do app for focus and fun!
                   </Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
           </Grid>
-          {/* Add more app cards here as you build more apps */}
+          <Grid item xs={12} sm={6}>
+            <Card sx={{ 
+              background: 'secondary.light', 
+              color: 'common.black', 
+              boxShadow: 3,
+              '&:hover': {
+                background: 'secondary.main'
+              }
+            }}>
+              <CardActionArea component={Link} to="/snake">
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    Snake
+                  </Typography>
+                  <Typography variant="body2">
+                    Classic snake game with a modern twist!
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
         </Grid>
       </Box>
       <ThemePickerModal
@@ -59,6 +87,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Gallery />} />
         <Route path="/adhd-n-d" element={<ADHDnDApp />} />
+        <Route path="/snake" element={<SnakeGame />} />
       </Routes>
     </Router>
   );
