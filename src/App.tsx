@@ -6,6 +6,7 @@ import SnakeGame from './snake/SnakeGame';
 import WordleGame from './wordle/WordleGame';
 import ThemePickerModal from './ThemePickerModal';
 import { useThemeContext } from './ThemeContext';
+import SpellingBeeGame from './components/SpellingBeeGame';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -71,6 +72,20 @@ function Gallery() {
             </CardActionArea>
           </Card>
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <Card>
+            <CardActionArea component={Link} to="/spelling-bee">
+              <CardContent>
+                <Typography variant="h5" component="h2" gutterBottom>
+                  Spelling Bee
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Make as many words as you can from 7 letters. Find the pangram!
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
       </Grid>
       <ThemePickerModal
         open={themeModalOpen}
@@ -90,6 +105,7 @@ function App() {
         <Route path="/adhd-n-d" element={<ADHDnDApp />} />
         <Route path="/snake" element={<SnakeGame />} />
         <Route path="/wordle" element={<WordleGame />} />
+        <Route path="/spelling-bee" element={<SpellingBeeGame />} />
       </Routes>
     </Router>
   );
