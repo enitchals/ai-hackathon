@@ -1,19 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Typography } from '@mui/material';
-
-const THEMES = [
-  {
-    name: 'Bold Classic',
-    colors: {
-      black: '#000000',
-      white: '#FFFFFF',
-      russianViolet: '#241E4E',
-      pennRed: '#960200',
-      sunglow: '#FFD046',
-      processCyan: '#30BCED',
-    },
-  },
-];
+import { THEMES } from './main';
 
 export interface ThemePickerModalProps {
   open: boolean;
@@ -22,40 +9,73 @@ export interface ThemePickerModalProps {
   selectedTheme: string;
 }
 
+interface ThemeConfig {
+  palette: {
+    mode: string;
+    primary: { main: string };
+    secondary: { main: string };
+    background: { default: string; paper: string };
+    text: { primary: string; secondary: string };
+    info: { main: string };
+    warning: { main: string };
+    error: { main: string };
+    success: { main: string };
+  };
+}
+
 const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSelectTheme, selectedTheme }) => {
+  const handleThemeSelect = (name: string) => {
+    console.log('Selecting theme:', name);
+    console.log('Current selected theme:', selectedTheme);
+    console.log('Available themes:', Object.keys(THEMES));
+    onSelectTheme(name);
+    onClose();
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>Select Theme</DialogTitle>
       <DialogContent>
-        {THEMES.map((theme) => (
+        {Object.entries(THEMES).map(([name, theme]) => (
           <Box
-            key={theme.name}
+            key={name}
             sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               p: 2,
               borderRadius: 2,
-              border: theme.name === selectedTheme ? '2px solid #241E4E' : '1px solid #ccc',
+              border: name === selectedTheme ? '2px solid #241E4E' : '1px solid #ccc',
               mb: 2,
-              background: theme.colors.white,
+              background: '#FFFFFF',
             }}
           >
             <Box>
-              <Typography variant="h6">{theme.name}</Typography>
+              <Typography variant="h6">{name}</Typography>
               <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                {Object.values(theme.colors).map((color) => (
-                  <Box key={color} sx={{ width: 24, height: 24, bgcolor: color, borderRadius: '50%', border: '1px solid #ccc' }} />
-                ))}
+                {Object.values((theme as ThemeConfig).palette).map((value: any) => 
+                  typeof value === 'object' && value.main ? (
+                    <Box 
+                      key={value.main} 
+                      sx={{ 
+                        width: 24, 
+                        height: 24, 
+                        bgcolor: value.main, 
+                        borderRadius: '50%', 
+                        border: '1px solid #ccc' 
+                      }} 
+                    />
+                  ) : null
+                )}
               </Box>
             </Box>
             <Button
-              variant={theme.name === selectedTheme ? 'contained' : 'outlined'}
+              variant={name === selectedTheme ? 'contained' : 'outlined'}
               color="primary"
-              onClick={() => onSelectTheme(theme.name)}
-              disabled={theme.name === selectedTheme}
+              onClick={() => handleThemeSelect(name)}
+              disabled={name === selectedTheme}
             >
-              {theme.name === selectedTheme ? 'Selected' : 'Select'}
+              {name === selectedTheme ? 'Selected' : 'Select'}
             </Button>
           </Box>
         ))}
