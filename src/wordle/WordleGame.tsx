@@ -175,13 +175,13 @@ export default function WordleGame() {
         )}
 
         {/* QWERTY Keyboard */}
-        <Box sx={{ mt: 2, userSelect: 'none' }}>
+        <Box sx={{ mt: 2, userSelect: 'none', width: '100%', maxWidth: 400, mx: 'auto' }}>
           {(() => {
-            // QWERTY layout
+            // QWERTY layout with Enter and Backspace
             const rows = [
               'QWERTYUIOP'.split(''),
               'ASDFGHJKL'.split(''),
-              'ZXCVBNM'.split(''),
+              ['Enter', ...'ZXCVBNM'.split(''), 'Backspace'],
             ];
 
             // Build a map of letter -> best status
@@ -211,31 +211,78 @@ export default function WordleGame() {
               empty: '#D3D6DA',
             };
 
+            // Handle on-screen key press
+            const handleVirtualKey = (key: string) => {
+              if (gameState.gameOver) return;
+              if (key === 'Backspace') {
+                setGameState(prev => ({
+                  ...prev,
+                  currentGuess: prev.currentGuess.slice(0, -1),
+                }));
+              } else if (key === 'Enter') {
+                if (gameState.currentGuess.length === WORD_LENGTH) {
+                  const newGuesses = [...gameState.guesses, gameState.currentGuess];
+                  const won = gameState.currentGuess === gameState.targetWord;
+                  setGameState(prev => ({
+                    ...prev,
+                    guesses: newGuesses,
+                    currentGuess: '',
+                    gameOver: won || newGuesses.length >= MAX_GUESSES,
+                    won,
+                  }));
+                }
+              } else if (/^[A-Z]$/.test(key) && gameState.currentGuess.length < WORD_LENGTH) {
+                setGameState(prev => ({
+                  ...prev,
+                  currentGuess: prev.currentGuess + key,
+                }));
+              }
+            };
+
+            // Fixed key width for all keys
+            const KEY_WIDTH = 36;
+            const SPECIAL_KEY_WIDTH = 48;
+            const KEY_HEIGHT = 48;
+
             return rows.map((row, rowIdx) => (
-              <Box key={rowIdx} sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
-                {row.map((letter) => (
-                  <Box
-                    key={letter}
-                    sx={{
-                      width: 40,
-                      height: 58,
-                      m: 0.5,
-                      borderRadius: 1,
-                      backgroundColor: colors[letterStatus[letter] || 'empty'],
-                      color: letterStatus[letter] && letterStatus[letter] !== 'empty' ? '#fff' : '#000',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold',
-                      fontSize: '1.2rem',
-                      boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
-                      cursor: 'default',
-                      userSelect: 'none',
-                    }}
-                  >
-                    {letter}
-                  </Box>
-                ))}
+              <Box key={rowIdx} sx={{ display: 'flex', justifyContent: 'center', mb: 1, gap: 1 }}>
+                {row.map((key) => {
+                  const isSpecial = key === 'Enter' || key === 'Backspace';
+                  let display = key;
+                  if (key === 'Backspace') display = '⌫';
+                  if (key === 'Enter') display = '→';
+                  return (
+                    <button
+                      key={key}
+                      aria-label={key === 'Enter' ? 'Enter' : key === 'Backspace' ? 'Backspace' : key}
+                      onClick={() => handleVirtualKey(key)}
+                      style={{
+                        width: isSpecial ? SPECIAL_KEY_WIDTH : KEY_WIDTH,
+                        height: KEY_HEIGHT,
+                        margin: 0,
+                        borderRadius: 6,
+                        background: isSpecial ? '#AAB7B8' : colors[letterStatus[key] || 'empty'],
+                        color: isSpecial ? '#222' : (letterStatus[key] && letterStatus[key] !== 'empty' ? '#fff' : '#000'),
+                        fontWeight: 'bold',
+                        fontSize: isSpecial ? '1.2rem' : '1.1rem',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        flex: `0 0 ${isSpecial ? SPECIAL_KEY_WIDTH : KEY_WIDTH}px`,
+                        maxWidth: isSpecial ? SPECIAL_KEY_WIDTH : KEY_WIDTH,
+                        minWidth: isSpecial ? SPECIAL_KEY_WIDTH : KEY_WIDTH,
+                        transition: 'background 0.2s',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 0,
+                      }}
+                    >
+                      {display}
+                    </button>
+                  );
+                })}
               </Box>
             ));
           })()}
