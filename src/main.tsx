@@ -22,10 +22,15 @@ const THEMES: Record<string, any> = {
 
 const THEME_KEY = 'global-theme'
 
-const ThemeContext = createContext({
+interface ThemeContextType {
+  themeName: string;
+  setThemeName: (name: string) => void;
+}
+
+const ThemeContext = createContext<ThemeContextType>({
   themeName: 'Bold Classic',
-  setThemeName: (name: string) => {},
-})
+  setThemeName: () => {},
+});
 
 export const useThemeContext = () => useContext(ThemeContext)
 
