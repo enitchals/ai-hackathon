@@ -191,8 +191,9 @@ export default function SnakeGame() {
             top: food.y * CELL_SIZE,
             width: CELL_SIZE,
             height: CELL_SIZE,
-            backgroundColor: 'error.main',
-            borderRadius: '50%'
+            backgroundColor: theme.palette.error.main,
+            borderRadius: '50%',
+            boxShadow: `0 0 4px ${theme.palette.error.dark}`
           }}
         />
         
@@ -206,9 +207,9 @@ export default function SnakeGame() {
               top: segment.y * CELL_SIZE,
               width: CELL_SIZE,
               height: CELL_SIZE,
-              backgroundColor: index === 0 ? 'primary.main' : 'primary.light',
-              border: '1px solid',
-              borderColor: 'primary.dark'
+              backgroundColor: index === 0 ? theme.palette.primary.main : theme.palette.primary.light,
+              border: `1px solid ${theme.palette.primary.dark}`,
+              boxShadow: index === 0 ? `0 0 4px ${theme.palette.primary.dark}` : 'none'
             }}
           />
         ))}
@@ -217,22 +218,36 @@ export default function SnakeGame() {
   };
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ 
+      height: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      backgroundColor: theme.palette.background.default
+    }}>
       <AppHeader title="Snake Game" />
       
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 2 }}>
+      <Box sx={{ 
+        flexGrow: 1, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        p: 2,
+        backgroundColor: theme.palette.background.default
+      }}>
         <Box sx={{
           width: GRID_SIZE * CELL_SIZE,
           height: GRID_SIZE * CELL_SIZE,
-          border: '2px solid',
+          border: `2px solid ${theme.palette.divider}`,
           position: 'relative',
-          backgroundColor: 'background.paper',
-          mb: isMobile ? 2 : 0
+          backgroundColor: theme.palette.background.paper,
+          mb: isMobile ? 2 : 0,
+          boxShadow: theme.shadows[2]
         }}>
           {renderGameElements()}
         </Box>
 
-        <Typography variant="h6" sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: theme.palette.text.primary }}>
           Score: {score}
         </Typography>
 
@@ -255,9 +270,9 @@ export default function SnakeGame() {
               onClick={() => handleDirectionPress('UP')}
               sx={{
                 gridArea: 'up',
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '&:hover': { backgroundColor: 'primary.dark' }
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                '&:hover': { backgroundColor: theme.palette.primary.dark }
               }}
             >
               <ArrowUpwardIcon fontSize="large" />
@@ -266,9 +281,9 @@ export default function SnakeGame() {
               onClick={() => handleDirectionPress('LEFT')}
               sx={{
                 gridArea: 'left',
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '&:hover': { backgroundColor: 'primary.dark' }
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                '&:hover': { backgroundColor: theme.palette.primary.dark }
               }}
             >
               <ArrowBackIcon fontSize="large" />
@@ -277,9 +292,9 @@ export default function SnakeGame() {
               onClick={() => handleDirectionPress('RIGHT')}
               sx={{
                 gridArea: 'right',
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '&:hover': { backgroundColor: 'primary.dark' }
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                '&:hover': { backgroundColor: theme.palette.primary.dark }
               }}
             >
               <ArrowForwardIcon fontSize="large" />
@@ -288,9 +303,9 @@ export default function SnakeGame() {
               onClick={() => handleDirectionPress('DOWN')}
               sx={{
                 gridArea: 'down',
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '&:hover': { backgroundColor: 'primary.dark' }
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                '&:hover': { backgroundColor: theme.palette.primary.dark }
               }}
             >
               <ArrowDownwardIcon fontSize="large" />
@@ -299,8 +314,8 @@ export default function SnakeGame() {
         )}
 
         {gameOver && (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h4" gutterBottom>
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant="h4" gutterBottom sx={{ color: theme.palette.text.primary }}>
               Game Over!
             </Typography>
             <Button 
@@ -312,6 +327,11 @@ export default function SnakeGame() {
                 setScore(0);
                 setFood(generateFood());
               }}
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                '&:hover': { backgroundColor: theme.palette.primary.dark }
+              }}
             >
               Play Again
             </Button>
@@ -319,11 +339,11 @@ export default function SnakeGame() {
         )}
 
         {isPaused && !gameOver && (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h4" color="primary">
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant="h4" sx={{ color: theme.palette.primary.main }}>
               Paused
             </Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
               Press Space to resume
             </Typography>
           </Box>
