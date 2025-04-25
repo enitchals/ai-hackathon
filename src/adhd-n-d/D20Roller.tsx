@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button } from '@mui/material';
-import D20Image from './d20.png'; // Assume the image is saved as d20.png in the same folder
+import D20Image from '../assets/d20.png'; // Assume the image is saved as d20.png in the same folder
 
 interface D20RollerProps {
   onRoll: (value: number) => void;

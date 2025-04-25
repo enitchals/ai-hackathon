@@ -8,6 +8,9 @@ import ThemePickerModal from './ThemePickerModal';
 import { useThemeContext } from './ThemeContext';
 import SpellingBeeGame from './spelling-bee/SpellingBeeGame';
 import BrickBreakerGame from './brick-breaker';
+import D20Image from './assets/d20.png';
+import WordleImage from './assets/wordle.png';
+import BrickBreakerImage from './assets/brick-breaker.png';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -30,77 +33,51 @@ function Gallery() {
           Choose Theme
         </Button>
       </Box>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardActionArea component={Link} to="/adhd-n-d">
-              <CardContent>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  ADHDnD
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  A D&D-inspired to-do adventure
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardActionArea component={Link} to="/snake">
-              <CardContent>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Snake Game
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Classic snake game with modern controls
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardActionArea component={Link} to="/wordle">
-              <CardContent>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Wordle
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  A word-guessing game with color-coded feedback
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardActionArea component={Link} to="/spelling-bee">
-              <CardContent>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Spelling Bee
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Make as many words as you can from 7 letters. Find the pangram!
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardActionArea component={Link} to="/brick-breaker">
-              <CardContent>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Brick Breaker
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Break all the bricks! Classic arcade fun.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+      <Grid container spacing={3} justifyContent="center">
+        {[{
+          title: 'ADHDnD',
+          description: 'A D&D-inspired to-do adventure',
+          to: '/adhd-n-d',
+          preview: <img src={D20Image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+        }, {
+          title: 'Snake',
+          description: 'Classic snake game with modern controls',
+          to: '/snake',
+          preview: <span role="img" aria-label="Snake" style={{ fontSize: 80, display: 'block', lineHeight: 1 }}>🐍</span>,
+        }, {
+          title: 'Wordle',
+          description: 'A word-guessing game with color-coded feedback',
+          to: '/wordle',
+          preview: <img src={WordleImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+        }, {
+          title: 'Spelling Bee',
+          description: 'Make as many words as you can from 7 letters. Find the pangram!',
+          to: '/spelling-bee',
+          preview: <span role="img" aria-label="Bee" style={{ fontSize: 80, display: 'block', lineHeight: 1 }}>🐝</span>,
+        }, {
+          title: 'Brick Breaker',
+          description: 'Break all the bricks! Classic arcade fun.',
+          to: '/brick-breaker',
+          preview: <img src={BrickBreakerImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+        }].map((app, idx) => (
+          <Grid item xs={12} sm={6} md={4} key={app.title} display="flex" justifyContent="center">
+            <Card sx={{ width: 260, height: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
+              <CardActionArea component={Link} to={app.to} sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <Box sx={{ width: 120, height: 120, mt: 3, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {app.preview}
+                </Box>
+                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
+                  <Typography variant="h5" component="h2" gutterBottom>
+                    {app.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {app.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
       <ThemePickerModal
         open={themeModalOpen}

@@ -1,5 +1,7 @@
 # React + TypeScript + Vite
 
+**Note:** When adding a new project to the AI Hackathon Gallery, please provide a preview image (ideally 1:1 aspect ratio, e.g. 120x120 or 240x240px) and place it in `src/assets/`. If you don't have an image yet, let the devs know to use the D20 placeholder.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -7,7 +7,7 @@ import D20Roller from './D20Roller';
 import TaskModal from './TaskModal';
 import TimerModal from './TimerModal';
 import DoneList from './DoneList';
-import D20Image from './d20.png';
+import D20Image from '../assets/d20.png';
 import AppHeader from '../components/AppHeader';
 
 const MAX_VISIBLE = 19;
