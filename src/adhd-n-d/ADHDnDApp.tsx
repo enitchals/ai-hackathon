@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Typography, Box, Paper, IconButton, Tooltip, Tabs, Tab, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import ThemePickerModal from '../ThemePickerModal';
+import { useThemeContext } from '../main';
 import { useNavigate } from 'react-router-dom';
 import { TodoProvider, useTodo, TodoItem } from './TodoContext';
 import TodoList from './TodoList';
@@ -23,6 +26,8 @@ const ADHDnDInner: React.FC = () => {
   const [timerModalOpen, setTimerModalOpen] = useState(false);
   const [timerDuration, setTimerDuration] = useState(300);
   const [timerLabel, setTimerLabel] = useState('Break Time! 🎉');
+  const [themeModalOpen, setThemeModalOpen] = useState(false);
+  const { themeName, setThemeName } = useThemeContext();
 
   const handleRoll = (value: number) => {
     setRollNumber(value);
@@ -72,6 +77,11 @@ const ADHDnDInner: React.FC = () => {
             ADHDnD
           </Typography>
         </Box>
+        <Tooltip title="Change Theme">
+          <IconButton onClick={() => setThemeModalOpen(true)} size="large" sx={{ position: 'absolute', right: 0 }}>
+            <ColorLensIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
       <Box sx={{ maxWidth: 600, minWidth: '33vw', mx: 'auto', mb: 2, flex: '1 1 0', display: 'flex', flexDirection: 'column', minHeight: 0, width: '100%' }}>
         <Tabs value={tab} onChange={(_, v) => setTab(v)} centered>
@@ -117,6 +127,12 @@ const ADHDnDInner: React.FC = () => {
         beepOnComplete={true}
         showStartButton={true}
         showEndButton={true}
+      />
+      <ThemePickerModal
+        open={themeModalOpen}
+        onClose={() => setThemeModalOpen(false)}
+        onSelectTheme={(name) => { setThemeName(name); setThemeModalOpen(false); }}
+        selectedTheme={themeName}
       />
     </Box>
   );
