@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import { Typography, Box, Paper, IconButton, Tooltip, Tabs, Tab, Button } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import ThemePickerModal from '../ThemePickerModal';
-import { useThemeContext } from '../main';
-import { useNavigate } from 'react-router-dom';
+import { Box, Tabs, Tab, Button } from '@mui/material';
 import { TodoProvider, useTodo, TodoItem } from './TodoContext';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
-import D20Roller from './D20Roller';
 import TaskModal from './TaskModal';
 import TimerModal from './TimerModal';
 import DoneList from './DoneList';
@@ -22,30 +16,9 @@ const ADHDnDInner: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<TodoItem | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [tab, setTab] = useState(0);
-  const navigate = useNavigate();
-  const [rollNumber, setRollNumber] = useState<number | null>(null);
   const [timerModalOpen, setTimerModalOpen] = useState(false);
   const [timerDuration, setTimerDuration] = useState(300);
   const [timerLabel, setTimerLabel] = useState('Break Time! 🎉');
-  const [themeModalOpen, setThemeModalOpen] = useState(false);
-  const { themeName, setThemeName } = useThemeContext();
-
-  const handleRoll = (value: number) => {
-    setRollNumber(value);
-    if (value === 20) {
-      setTimerLabel('Break Time! 🎉');
-      setTimerDuration(300);
-      setTimerModalOpen(true);
-      setSelectedTask(null);
-      setShowTaskModal(false);
-    } else {
-      const visible = todoList.slice(0, MAX_VISIBLE);
-      if (visible.length === 0) return;
-      const idx = (value - 1) % visible.length;
-      setSelectedTask(visible[idx]);
-      setShowTaskModal(true);
-    }
-  };
 
   const handleTakeBreak = (duration: number) => {
     setTimerLabel(`Break Time! (${duration / 60} min)`);
@@ -96,8 +69,6 @@ const ADHDnDInner: React.FC = () => {
         onDone={handleDone}
         onGiveUp={handleGiveUp}
         onClose={() => setShowTaskModal(false)}
-        rollNumber={rollNumber && rollNumber !== 20 ? rollNumber : undefined}
-        dieImage={rollNumber && rollNumber !== 20 ? D20Image : undefined}
       />
       <TimerModal
         open={timerModalOpen}
@@ -108,12 +79,6 @@ const ADHDnDInner: React.FC = () => {
         beepOnComplete={true}
         showStartButton={true}
         showEndButton={true}
-      />
-      <ThemePickerModal
-        open={themeModalOpen}
-        onClose={() => setThemeModalOpen(false)}
-        onSelectTheme={(name) => { setThemeName(name); setThemeModalOpen(false); }}
-        selectedTheme={themeName}
       />
     </Box>
   );
