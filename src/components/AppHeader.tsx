@@ -1,9 +1,8 @@
-import React from 'react';
-import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, IconButton, Typography, Box, Tabs, Tab } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
 import { useNavigate } from 'react-router-dom';
-import { useThemeContext } from '../main';
+import { useThemeContext } from '../ThemeContext';
 import ThemePickerModal from '../ThemePickerModal';
 
 interface AppHeaderProps {
@@ -20,8 +19,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({
   children
 }) => {
   const navigate = useNavigate();
-  const [themeModalOpen, setThemeModalOpen] = React.useState(false);
   const { themeName, setThemeName } = useThemeContext();
+  const [themeModalOpen, setThemeModalOpen] = useState(false);
 
   return (
     <AppBar position="static" color="default" elevation={1}>
@@ -41,28 +40,35 @@ const AppHeader: React.FC<AppHeaderProps> = ({
           {title}
         </Typography>
 
-        {children}
-
-        {showThemePicker && (
-          <>
-            <IconButton
-              color="inherit"
-              onClick={() => setThemeModalOpen(true)}
-            >
-              <ColorLensIcon />
-            </IconButton>
-            <ThemePickerModal
-              open={themeModalOpen}
-              onClose={() => setThemeModalOpen(false)}
-              onSelectTheme={(name) => {
-                setThemeName(name);
-                setThemeModalOpen(false);
-              }}
-              selectedTheme={themeName}
-            />
-          </>
-        )}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {children}
+          {showThemePicker && (
+            <>
+              <IconButton
+                color="inherit"
+                onClick={() => setThemeModalOpen(true)}
+              >
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    bgcolor: 'primary.main',
+                    border: '1px solid',
+                    borderColor: 'primary.dark',
+                  }}
+                />
+              </IconButton>
+            </>
+          )}
+        </Box>
       </Toolbar>
+      <ThemePickerModal
+        open={themeModalOpen}
+        onClose={() => setThemeModalOpen(false)}
+        onSelectTheme={setThemeName}
+        selectedTheme={themeName}
+      />
     </AppBar>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Typography } from '@mui/material';
-import { THEMES } from './main';
+import { THEMES } from './ThemeContext';
 
 export interface ThemePickerModalProps {
   open: boolean;
