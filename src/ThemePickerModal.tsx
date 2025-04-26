@@ -40,20 +40,40 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSe
         {Object.entries(THEMES).map(([name, theme]) => (
           <Box
             key={name}
+            component="button"
+            type="button"
+            onClick={() => handleThemeSelect(name)}
+            tabIndex={0}
+            aria-pressed={name === selectedTheme}
             sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
               p: 2,
               borderRadius: 2,
               border: name === selectedTheme ? '2px solid #241E4E' : '1px solid #ccc',
               mb: 2,
-              background: '#FFFFFF',
+              background: name === selectedTheme ? '#f0f0f0' : '#FFFFFF',
+              minWidth: 0,
+              maxWidth: '100%',
+              gap: 2,
+              cursor: 'pointer',
+              outline: 'none',
+              transition: 'background 0.2s, border 0.2s',
+              boxShadow: name === selectedTheme ? 2 : 0,
+              '&:hover': {
+                background: name === selectedTheme ? '#e0e0e0' : '#f5f5f5',
+              },
+              '&:focus': {
+                border: '2px solid #241E4E',
+                background: '#f0f0f0',
+              },
             }}
           >
-            <Box>
-              <Typography variant="h6">{name}</Typography>
-              <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+            <Box sx={{ minWidth: 0, maxWidth: '100%' }}>
+              <Typography variant="h6" sx={{ wordBreak: 'break-word', textAlign: 'left' }}>{name}</Typography>
+              <Box sx={{ display: 'flex', gap: 1, mt: 1, flexWrap: 'wrap', minWidth: 0 }}>
                 {Object.entries((theme as ThemeConfig).palette).map(([key, value]) => {
                   if (typeof value === 'object' && value !== null && 'main' in value) {
                     return (
@@ -65,6 +85,7 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSe
                           bgcolor: (value as { main: string }).main,
                           borderRadius: '50%',
                           border: '1px solid #ccc',
+                          flexShrink: 0,
                         }}
                       />
                     );
@@ -73,14 +94,6 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({ open, onClose, onSe
                 })}
               </Box>
             </Box>
-            <Button
-              variant={name === selectedTheme ? 'contained' : 'outlined'}
-              color="primary"
-              onClick={() => handleThemeSelect(name)}
-              disabled={name === selectedTheme}
-            >
-              {name === selectedTheme ? 'Selected' : 'Select'}
-            </Button>
           </Box>
         ))}
       </DialogContent>

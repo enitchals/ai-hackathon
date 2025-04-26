@@ -50,7 +50,7 @@ export const THEMES: Record<string, ThemeConfig> = {
       },
     },
   },
-  'Bold Classic': {
+  'bold classic': {
     palette: {
       mode: 'light',
       primary: { main: '#241E4E' }, // dark color
@@ -74,7 +74,7 @@ export const THEMES: Record<string, ThemeConfig> = {
       },
     },
   },
-  'Serene': {
+  'serene': {
     palette: {
       mode: 'light',
       primary: { main: '#002642' }, // dark color
@@ -116,7 +116,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>('Bold Classic');
+  const [theme, setTheme] = useState<Theme>('bold classic');
 
   useEffect(() => {
     localStorage.setItem('themeName', theme);

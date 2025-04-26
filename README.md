@@ -1,56 +1,30 @@
-# React + TypeScript + Vite
+# ai hackathon
+this is the one part of this project that's written totally by humans, totally for humans (well, okay, i'm sure several bots will ingest it).
 
-**Note:** When adding a new project to the AI Hackathon Gallery, please provide a preview image (ideally 1:1 aspect ratio, e.g. 120x120 or 240x240px) and place it in `src/assets/`. If you don't have an image yet, let the devs know to use the D20 placeholder.
+i started today planning to build one complex side project to demonstrate what cursor could do. as i started thinking through what i wanted to prove, i realized that throwing cursor at a number of side projects and seeing what worked and what didn't, then rapidly iterating, was probably the best way to learn.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+so i 'vibe coded' my way through eight side projects in one (_extremely long_) day. each of those projects might've taken me a day or two or way, way longer if i'd coded it by hand.
 
-Currently, two official plugins are available:
+there were plenty of stumbling blocks, but -- at the risk of sounding like i'm drinking the kool-aid -- this feels like _magic_.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Artifacts
 
-## Expanding the ESLint configuration
+[visit the deployed application here!](https://enitchals.github.io/ai-hackathon/#/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+here are the artifacts from today's session:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- [the overall context](./cursor-context/overall-context.md) that cursor kept for itself throughout the project
+- [a project journal](./cursor-context/project-journal.md) detailing each of the apps we built
+- [cursor's own reflections](./cursor-context/ai-reflections.md) on the process
+- [some rules of engagement](./cursor-context/rules-for-next-time.md) to help us move faster next time
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+here are project files (generated for cursor, by cursor) for each of the apps we built:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- [adhdnd](./cursor-context/project-notes/adhd-n-d.md)
+- [brick breaker](./cursor-context/project-notes/brick-breaker.md)
+- [pac-man](./cursor-context/project-notes/pac-man.md)
+- [racing game](./cursor-context/project-notes/racing-game.md)
+- [snake](./cursor-context/project-notes/snake.md)
+- [busy bee](./cursor-context/project-notes/busy-bee.md)
+- [tetris](./cursor-context/project-notes/tetris.md)
+- [wordle](./cursor-context/project-notes/wordle.md)
