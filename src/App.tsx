@@ -14,6 +14,7 @@ import BrickBreakerImage from './assets/brick-breaker.png';
 import SpellingBeeImage from './assets/spelling-bee.png';
 import SnakeImage from './assets/snake.png';
 import RacingGame from './racing-game';
+import TetrisGame from './tetris';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -67,6 +68,11 @@ function Gallery() {
           description: 'Dodge obstacles and race for a high score! Emoji-powered fun.',
           to: '/racing-game',
           preview: <span style={{ fontSize: 80, display: 'block', textAlign: 'center' }}>🏎️</span>,
+        }, {
+          title: 'Tetris',
+          description: 'Classic falling blocks with a pastel twist!',
+          to: '/tetris',
+          preview: <span style={{ fontSize: 80, display: 'block', textAlign: 'center' }}>🎲</span>,
         }].map((app) => (
           <Grid item xs={12} sm={6} md={4} key={app.title} display="flex" justifyContent="center">
             <Card sx={{ width: 340, height: 340, p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
@@ -108,6 +114,7 @@ function App() {
         <Route path="/spelling-bee" element={<SpellingBeeGame />} />
         <Route path="/brick-breaker" element={<BrickBreakerGame />} />
         <Route path="/racing-game" element={<RacingGame />} />
+        <Route path="/tetris" element={<TetrisGame />} />
       </Routes>
     </Router>
   );
