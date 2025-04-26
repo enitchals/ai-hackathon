@@ -491,10 +491,24 @@ const BrickBreakerGame: React.FC = () => {
             onTouchEnd={() => setMobilePress(null)}
             size="large"
             color="primary"
-            sx={{ width: 72, height: 72, borderRadius: '50%', background: 'primary.main', color: '#fff', fontSize: 40, boxShadow: 2 }}
+            sx={{
+              width: 72,
+              height: 72,
+              borderRadius: '50%',
+              backgroundColor: 'primary.main',
+              color: '#fff',
+              fontSize: 40,
+              boxShadow: 2,
+              '&:hover': {
+                backgroundColor: 'primary.dark',
+              },
+              '&:active': {
+                backgroundColor: 'primary.light',
+              },
+            }}
             aria-label="Move Left"
           >
-            <ArrowLeftIcon sx={{ fontSize: 40 }} />
+            <ArrowLeftIcon sx={{ fontSize: 40, color: '#fff' }} />
           </IconButton>
           <IconButton
             onMouseDown={() => setMobilePress('right')}
@@ -504,10 +518,24 @@ const BrickBreakerGame: React.FC = () => {
             onTouchEnd={() => setMobilePress(null)}
             size="large"
             color="primary"
-            sx={{ width: 72, height: 72, borderRadius: '50%', background: 'primary.main', color: '#fff', fontSize: 40, boxShadow: 2 }}
+            sx={{
+              width: 72,
+              height: 72,
+              borderRadius: '50%',
+              backgroundColor: 'primary.main',
+              color: '#fff',
+              fontSize: 40,
+              boxShadow: 2,
+              '&:hover': {
+                backgroundColor: 'primary.dark',
+              },
+              '&:active': {
+                backgroundColor: 'primary.light',
+              },
+            }}
             aria-label="Move Right"
           >
-            <ArrowRightIcon sx={{ fontSize: 40 }} />
+            <ArrowRightIcon sx={{ fontSize: 40, color: '#fff' }} />
           </IconButton>
         </Box>
         {/* How to Play button */}
