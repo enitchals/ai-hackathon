@@ -110,7 +110,8 @@ function renderMiniTetromino(type: TetrominoType | null, size = 18) {
                 top: r * size,
                 bgcolor: tetrisTheme[type].main,
                 border: `2px solid ${tetrisTheme[type].border}`,
-                borderRadius: 2,
+                borderRadius: 1,
+                boxShadow: `inset 2px 2px 6px #fff6, inset -2px -2px 8px #0002`,
               }}
             />
           ) : null
@@ -144,12 +145,27 @@ const TetrisGame: React.FC = () => {
       score: 0,
       level: 1,
       lines: 0,
-      status: GameStatus.Running,
+      status: GameStatus.Idle,
       highScore,
     };
   });
   const lastDropTime = useRef(performance.now());
   const [showPause, setShowPause] = useState(false);
+  const onboardingButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Onboarding/Instructions Overlay
+  const handleStart = () => {
+    setGameState(prev => ({ ...prev, status: GameStatus.Running }));
+    setTimeout(() => {
+      if (canvasRef.current) canvasRef.current.focus();
+    }, 0);
+  };
+
+  useEffect(() => {
+    if (gameState.status === GameStatus.Idle && onboardingButtonRef.current) {
+      onboardingButtonRef.current.focus();
+    }
+  }, [gameState.status]);
 
   // Draw playfield and active tetromino
   useEffect(() => {
@@ -163,11 +179,31 @@ const TetrisGame: React.FC = () => {
       for (let col = 0; col < BOARD_WIDTH; col++) {
         const cell = gameState.playfield[row][col];
         if (cell.filled && cell.type) {
+          // 3D effect: light top/left, dark bottom/right
           ctx.fillStyle = tetrisTheme[cell.type].main;
           ctx.strokeStyle = tetrisTheme[cell.type].border;
           ctx.lineWidth = 2;
           ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
           ctx.strokeRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+          // 3D shading
+          ctx.save();
+          ctx.globalAlpha = 0.18;
+          ctx.fillStyle = '#fff'; // light highlight
+          ctx.beginPath();
+          ctx.moveTo(col * CELL_SIZE, row * CELL_SIZE + CELL_SIZE);
+          ctx.lineTo(col * CELL_SIZE, row * CELL_SIZE);
+          ctx.lineTo(col * CELL_SIZE + CELL_SIZE, row * CELL_SIZE);
+          ctx.closePath();
+          ctx.fill();
+          ctx.globalAlpha = 0.12;
+          ctx.fillStyle = '#000'; // shadow
+          ctx.beginPath();
+          ctx.moveTo(col * CELL_SIZE, row * CELL_SIZE + CELL_SIZE);
+          ctx.lineTo(col * CELL_SIZE + CELL_SIZE, row * CELL_SIZE + CELL_SIZE);
+          ctx.lineTo(col * CELL_SIZE + CELL_SIZE, row * CELL_SIZE);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
         } else {
           ctx.fillStyle = '#f8f8fa';
           ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -217,6 +253,25 @@ const TetrisGame: React.FC = () => {
             ctx.lineWidth = 2;
             ctx.fillRect(drawCol * CELL_SIZE, drawRow * CELL_SIZE, CELL_SIZE, CELL_SIZE);
             ctx.strokeRect(drawCol * CELL_SIZE, drawRow * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            // 3D shading
+            ctx.save();
+            ctx.globalAlpha = 0.18;
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.moveTo(drawCol * CELL_SIZE, drawRow * CELL_SIZE + CELL_SIZE);
+            ctx.lineTo(drawCol * CELL_SIZE, drawRow * CELL_SIZE);
+            ctx.lineTo(drawCol * CELL_SIZE + CELL_SIZE, drawRow * CELL_SIZE);
+            ctx.closePath();
+            ctx.fill();
+            ctx.globalAlpha = 0.12;
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.moveTo(drawCol * CELL_SIZE, drawRow * CELL_SIZE + CELL_SIZE);
+            ctx.lineTo(drawCol * CELL_SIZE + CELL_SIZE, drawRow * CELL_SIZE + CELL_SIZE);
+            ctx.lineTo(drawCol * CELL_SIZE + CELL_SIZE, drawRow * CELL_SIZE);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
           }
         }
       }
@@ -323,6 +378,10 @@ const TetrisGame: React.FC = () => {
 
   // Keyboard controls
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (gameState.status === GameStatus.Idle && (e.key === ' ' || e.key === 'Enter')) {
+      handleStart();
+      return;
+    }
     if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
       if (gameState.status === GameStatus.Running) doPause();
       else if (gameState.status === GameStatus.Paused) doResume();
@@ -452,7 +511,7 @@ const TetrisGame: React.FC = () => {
 
   // Side panel UI
   const SidePanel = (
-    <Paper elevation={2} sx={{ p: 2, minWidth: 120, bgcolor: 'background.paper', borderRadius: 3, mb: 2 }}>
+    <Paper elevation={2} sx={{ p: 2, minWidth: 120, bgcolor: 'background.paper', borderRadius: 3, mb: 2 }} aria-label="Tetris sidebar" role="complementary">
       <Stack spacing={2} alignItems="center">
         <Box>
           <Typography variant="subtitle2" color="text.secondary">Hold</Typography>
@@ -464,15 +523,15 @@ const TetrisGame: React.FC = () => {
             <Box key={i} sx={{ mb: 0.5 }}>{renderMiniTetromino(type)}</Box>
           ))}
         </Box>
-        <Box>
+        <Box aria-live="polite" aria-atomic="true">
           <Typography variant="subtitle2" color="text.secondary">Score</Typography>
           <Typography variant="h6">{gameState.score}</Typography>
         </Box>
-        <Box>
+        <Box aria-live="polite" aria-atomic="true">
           <Typography variant="subtitle2" color="text.secondary">Level</Typography>
           <Typography variant="h6">{gameState.level}</Typography>
         </Box>
-        <Box>
+        <Box aria-live="polite" aria-atomic="true">
           <Typography variant="subtitle2" color="text.secondary">Lines</Typography>
           <Typography variant="h6">{gameState.lines}</Typography>
         </Box>
@@ -480,44 +539,15 @@ const TetrisGame: React.FC = () => {
           <Typography variant="subtitle2" color="text.secondary">High Score</Typography>
           <Typography variant="h6">{gameState.highScore}</Typography>
         </Box>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={doHold}
-          disabled={!gameState.canHold}
-          sx={{ mt: 1 }}
-        >
-          Hold (H)
-        </Button>
       </Stack>
     </Paper>
   );
 
-  // On-screen controls for mobile
+  // On-screen controls for mobile (4-button keypad layout)
   const Controls = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
-      <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-        <Button variant="contained" size="small" onClick={() => setGameState(prev => {
-          if (prev.status !== GameStatus.Running) return prev;
-          let { activeTetromino, playfield } = prev;
-          if (canMove(playfield, activeTetromino, 0, -1)) {
-            activeTetromino = { ...activeTetromino, col: activeTetromino.col - 1 };
-            activeTetromino.shape = tetrominoShapes[activeTetromino.type][activeTetromino.rotation];
-            return { ...prev, activeTetromino };
-          }
-          return prev;
-        })}>◀️</Button>
-        <Button variant="contained" size="small" onClick={() => setGameState(prev => {
-          if (prev.status !== GameStatus.Running) return prev;
-          let { activeTetromino, playfield } = prev;
-          if (canMove(playfield, activeTetromino, 0, 1)) {
-            activeTetromino = { ...activeTetromino, col: activeTetromino.col + 1 };
-            activeTetromino.shape = tetrominoShapes[activeTetromino.type][activeTetromino.rotation];
-            return { ...prev, activeTetromino };
-          }
-          return prev;
-        })}>▶️</Button>
-        <Button variant="contained" size="small" onClick={() => setGameState(prev => {
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }} aria-label="Tetris controls" role="group">
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, mb: 1 }}>
+        <Button variant="contained" size="small" aria-label="Rotate" onClick={() => setGameState(prev => {
           if (prev.status !== GameStatus.Running) return prev;
           let { activeTetromino, playfield } = prev;
           // Rotate clockwise
@@ -528,11 +558,19 @@ const TetrisGame: React.FC = () => {
           }
           return prev;
         })}>⟳</Button>
-        <Button variant="contained" size="small" onClick={doHold} disabled={!gameState.canHold}>Hold</Button>
-        <Button variant="contained" size="small" onClick={doPause}><PauseIcon /></Button>
       </Box>
-      <Box sx={{ display: 'flex', gap: 1 }}>
-        <Button variant="contained" size="small" onClick={() => setGameState(prev => {
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+        <Button variant="contained" size="small" aria-label="Left" onClick={() => setGameState(prev => {
+          if (prev.status !== GameStatus.Running) return prev;
+          let { activeTetromino, playfield } = prev;
+          if (canMove(playfield, activeTetromino, 0, -1)) {
+            activeTetromino = { ...activeTetromino, col: activeTetromino.col - 1 };
+            activeTetromino.shape = tetrominoShapes[activeTetromino.type][activeTetromino.rotation];
+            return { ...prev, activeTetromino };
+          }
+          return prev;
+        })}>◀️</Button>
+        <Button variant="contained" size="small" aria-label="Down" onClick={() => setGameState(prev => {
           if (prev.status !== GameStatus.Running) return prev;
           let { activeTetromino, playfield } = prev;
           if (canMove(playfield, activeTetromino, 1, 0)) {
@@ -542,7 +580,19 @@ const TetrisGame: React.FC = () => {
           }
           return prev;
         })}>▼</Button>
-        <Button variant="contained" size="small" color="secondary" onClick={() => setGameState(prev => {
+        <Button variant="contained" size="small" aria-label="Right" onClick={() => setGameState(prev => {
+          if (prev.status !== GameStatus.Running) return prev;
+          let { activeTetromino, playfield } = prev;
+          if (canMove(playfield, activeTetromino, 0, 1)) {
+            activeTetromino = { ...activeTetromino, col: activeTetromino.col + 1 };
+            activeTetromino.shape = tetrominoShapes[activeTetromino.type][activeTetromino.rotation];
+            return { ...prev, activeTetromino };
+          }
+          return prev;
+        })}>▶️</Button>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, mt: 1 }}>
+        <Button variant="contained" size="small" aria-label="Hard Drop" color="secondary" onClick={() => setGameState(prev => {
           if (prev.status !== GameStatus.Running) return prev;
           let { activeTetromino, playfield, nextTetrominoes, score, lines } = prev;
           let dropRow = activeTetromino.row;
@@ -577,6 +627,8 @@ const TetrisGame: React.FC = () => {
             level: newLevel,
           };
         })}>⏬</Button>
+        <Button variant="contained" size="small" aria-label="Hold" onClick={doHold} disabled={!gameState.canHold}>Hold</Button>
+        <Button variant="contained" size="small" aria-label="Pause" onClick={doPause}><PauseIcon /></Button>
       </Box>
       <Typography variant="caption" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
         Controls: ← → ▼ ⟳ (rotate) ⏬ (hard drop) Hold (H) Pause (P/Esc)
@@ -594,16 +646,56 @@ const TetrisGame: React.FC = () => {
     </Dialog>
   );
 
+  // Onboarding/Instructions Overlay
+  const OnboardingOverlay = (
+    <Dialog
+      open={gameState.status === GameStatus.Idle}
+      aria-labelledby="tetris-onboarding-title"
+      aria-describedby="tetris-onboarding-desc"
+      disableEscapeKeyDown
+    >
+      <DialogTitle id="tetris-onboarding-title">Welcome to Tetris!</DialogTitle>
+      <DialogContent>
+        <Typography id="tetris-onboarding-desc" sx={{ mb: 2 }}>
+          <b>How to play:</b><br />
+          - Move: <b>← →</b> (arrows or on-screen buttons)<br />
+          - Rotate: <b>↑</b> or <b>X</b> (or ⟳ button)<br />
+          - Soft Drop: <b>↓</b> (or ▼ button)<br />
+          - Hard Drop: <b>Space</b> (or ⏬ button)<br />
+          - Hold: <b>H</b> (or Hold button)<br />
+          - Pause: <b>P</b> or <b>Esc</b><br />
+          <br />
+          <b>Goal:</b> Clear lines for points. Game speeds up as you level up!
+        </Typography>
+        <Button
+          ref={onboardingButtonRef}
+          variant="contained"
+          color="primary"
+          onClick={handleStart}
+          aria-label="Start Tetris"
+        >
+          Press to Start
+        </Button>
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
+          (You can also press <b>Space</b> or <b>Enter</b> to start)
+        </Typography>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
-    <Box sx={{ width: '100vw', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box sx={{ width: '100vw', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'auto' }}>
       <AppHeader title="Tetris" />
       <Box
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
+          flexDirection: 'row',
           alignItems: 'flex-start',
           justifyContent: 'center',
           mt: 2,
+          minWidth: 400,
+          width: '100%',
+          overflowX: 'auto',
         }}
       >
         {SidePanel}
@@ -614,10 +706,14 @@ const TetrisGame: React.FC = () => {
             width={BOARD_WIDTH * CELL_SIZE}
             height={BOARD_HEIGHT * CELL_SIZE}
             style={{ border: '2px solid #ccc', background: '#fff', borderRadius: 8 }}
+            tabIndex={0}
+            aria-label="Tetris playfield"
+            role="region"
           />
           {Controls}
         </Box>
       </Box>
+      {OnboardingOverlay}
       {PauseOverlay}
       {GameOverOverlay}
     </Box>
