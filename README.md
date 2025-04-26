@@ -5,7 +5,7 @@ i started today planning to build one complex side project to demonstrate what c
 
 so i 'vibe coded' my way through eight side projects in one (_extremely long_) day. each of those projects might've taken me a day or two or way, way longer if i'd coded it by hand.
 
-there were plenty of stumbling blocks, but -- at the risk of sounding like i'm drinking the kool-aid -- this feels like _magic_. cursor breezed through so many things i'd expected to pose problems. it felt like flying.
+there were plenty of stumbling blocks, but -- at the risk of sounding like i'm drinking the koolaid -- this was a _magical_ experience. cursor breezed through so many things i'd expected to pose problems. it felt like flying.
 
 ## Artifacts
 
