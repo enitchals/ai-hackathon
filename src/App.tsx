@@ -84,10 +84,7 @@ function Gallery() {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box textAlign="center">
         <Typography variant="h3" component="h1" gutterBottom>
-          ai hackathon gallery
-        </Typography>
-        <Typography variant="body1" color="text.secondary" gutterBottom>
-          select an app below to get started!
+          ai hackathon
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 3 }}>
           <Button
@@ -111,14 +108,15 @@ function Gallery() {
       {isMobile ? (
         <Box
           sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: 2,
+            height: 'calc(100dvh - 180px)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignContent: 'flex-start',
+            alignItems: 'flex-start',
             justifyContent: 'center',
-            alignItems: 'center',
-            mt: 2,
-            mb: 2,
-            px: 1,
+            p: 0,
+            m: 0,
+            gap: 0,
           }}
         >
           {apps.map((app) => (
@@ -127,34 +125,38 @@ function Gallery() {
               component={Link}
               to={app.to}
               sx={{
+                width: '42vw',
+                height: '42vw',
+                maxWidth: '160px',
+                maxHeight: '160px',
+                aspectRatio: '1 / 1',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxSizing: 'border-box',
                 bgcolor: 'background.paper',
                 borderRadius: 3,
                 boxShadow: 3,
-                width: 'clamp(100px, 38vw, 180px)',
-                height: 'clamp(100px, 38vw, 180px)',
-                m: 'auto',
-                p: 0,
+                m: '6px',
                 transition: 'box-shadow 0.2s',
                 '&:active': { boxShadow: 6 },
                 '&:hover': { boxShadow: 6 },
                 textDecoration: 'none',
+                overflow: 'hidden',
+                gap: 1,
               }}
               aria-label={app.title}
             >
               <Box
                 sx={{
-                  width: '90%',
-                  height: '90%',
+                  width: '100%',
+                  height: '100%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
                 {app.preview &&
-                  // If the preview is an <img>, override its style to be responsive
                   typeof app.preview === 'object' && app.preview.type === 'img'
                     ? (
                       <img
@@ -163,9 +165,9 @@ function Gallery() {
                         style={{
                           width: '100%',
                           height: '100%',
-                          objectFit: 'contain',
-                          borderRadius: 12,
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                          objectFit: 'cover',
+                          borderRadius: 0,
+                          boxShadow: 'none',
                         }}
                       />
                     )
