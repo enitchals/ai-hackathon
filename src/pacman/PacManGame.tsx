@@ -566,8 +566,8 @@ const PacManGame: React.FC = () => {
         aria-label="Pac-Man"
         role="img"
       >
-        <circle cx="9" cy="9" r="9" fill="#FFD046" />
-        <path d="M9 9 L18 5 A9 9 0 1 1 18 13 Z" fill="#181818" />
+        <circle cx="9" cy="9" r="9" fill="var(--pm-pacman, #FFD046)" />
+        <path d="M9 9 L18 5 A9 9 0 1 1 18 13 Z" fill="var(--pm-pacman-mouth, #181818)" />
       </svg>
     );
   }
@@ -589,8 +589,8 @@ const PacManGame: React.FC = () => {
         aria-label="Pac-Man"
         role="img"
       >
-        <circle cx="9" cy="9" r="9" fill="#FFD046" />
-        <path d="M9 9 L18 5 A9 9 0 1 1 18 13 Z" fill="#181818" />
+        <circle cx="9" cy="9" r="9" fill="var(--pm-pacman, #FFD046)" />
+        <path d="M9 9 L18 5 A9 9 0 1 1 18 13 Z" fill="var(--pm-pacman-mouth, #181818)" />
       </svg>
     );
   }
@@ -599,9 +599,9 @@ const PacManGame: React.FC = () => {
   function GhostSVG({ color, direction, mode }: { color: string; direction: 'up' | 'down' | 'left' | 'right'; mode: 'chase' | 'scatter' | 'frightened' | 'eaten' }) {
     // Classic ghost body path
     // Frightened: blue, Eaten: eyes only
-    const bodyColor = mode === 'frightened' ? '#1e90ff' : (mode === 'eaten' ? '#fff' : color);
-    const eyeColor = mode === 'eaten' ? '#181818' : '#fff';
-    const pupilColor = '#1e90ff';
+    const bodyColor = mode === 'frightened' ? 'var(--pm-frightened, #1e90ff)' : (mode === 'eaten' ? 'var(--pm-ghost-eaten, #fff)' : color);
+    const eyeColor = mode === 'eaten' ? 'var(--pm-ghost-eye, #181818)' : 'var(--pm-ghost-eye-white, #fff)';
+    const pupilColor = 'var(--pm-frightened, #1e90ff)';
     // Eye direction offset
     const eyeOffset = {
       up: { x: 0, y: -2 },
@@ -619,8 +619,8 @@ const PacManGame: React.FC = () => {
         <ellipse cx="6.5" cy="8" rx="2" ry="2.2" fill={eyeColor} />
         <ellipse cx="11.5" cy="8" rx="2" ry="2.2" fill={eyeColor} />
         {/* Pupils */}
-        <ellipse cx={6.5 + eyeOffset.x} cy={8 + eyeOffset.y} rx="0.7" ry="1" fill={mode === 'frightened' ? '#fff' : '#181818'} />
-        <ellipse cx={11.5 + eyeOffset.x} cy={8 + eyeOffset.y} rx="0.7" ry="1" fill={mode === 'frightened' ? '#fff' : '#181818'} />
+        <ellipse cx={6.5 + eyeOffset.x} cy={8 + eyeOffset.y} rx="0.7" ry="1" fill={pupilColor} />
+        <ellipse cx={11.5 + eyeOffset.x} cy={8 + eyeOffset.y} rx="0.7" ry="1" fill={pupilColor} />
         {/* Frightened ghost mouth */}
         {mode === 'frightened' && (
           <rect x="7" y="13" width="4" height="1.2" rx="0.6" fill="#fff" />
