@@ -15,10 +15,19 @@ import SpellingBeeImage from './assets/spelling-bee.png';
 import SnakeImage from './assets/snake.png';
 import RacingGame from './racing-game';
 import TetrisGame from './tetris';
+import TetrisImage from './assets/tetris.png';
+import RacingGameImage from './assets/racing-game.png';
+import PacMan from './pacman';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
   const { themeName, setThemeName } = useThemeContext();
+  const PacManPreview = (
+    <svg width="100%" height="100%" viewBox="0 0 100 100" style={{ background: 'black', borderRadius: 12 }}>
+      <circle cx="50" cy="50" r="40" fill="#FFD046" />
+      <polygon points="50,50 90,30 90,70" fill="black" />
+    </svg>
+  );
   return (
     <Container maxWidth="sm" sx={{ py: 4 }}>
       <Box textAlign="center">
@@ -67,12 +76,17 @@ function Gallery() {
           title: 'Racing Game',
           description: 'Dodge obstacles and race for a high score! Emoji-powered fun.',
           to: '/racing-game',
-          preview: <span style={{ fontSize: 80, display: 'block', textAlign: 'center' }}>🏎️</span>,
+          preview: <img src={RacingGameImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
         }, {
           title: 'Tetris',
           description: 'Classic falling blocks with a pastel twist!',
           to: '/tetris',
-          preview: <span style={{ fontSize: 80, display: 'block', textAlign: 'center' }}>🎲</span>,
+          preview: <img src={TetrisImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+        }, {
+          title: 'Pac-Man',
+          description: 'The classic maze chase game, faithfully recreated!',
+          to: '/pacman',
+          preview: PacManPreview,
         }].map((app) => (
           <Grid item xs={12} sm={6} md={4} key={app.title} display="flex" justifyContent="center">
             <Card sx={{ width: 340, height: 340, p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
@@ -115,6 +129,7 @@ function App() {
         <Route path="/brick-breaker" element={<BrickBreakerGame />} />
         <Route path="/racing-game" element={<RacingGame />} />
         <Route path="/tetris" element={<TetrisGame />} />
+        <Route path="/pacman" element={<PacMan />} />
       </Routes>
     </Router>
   );

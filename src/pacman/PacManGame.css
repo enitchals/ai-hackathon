@@ -1,0 +1,71 @@
+.maze-grid {
+  background: #181818;
+  box-sizing: border-box;
+}
+.cell {
+  box-sizing: border-box;
+  position: relative;
+}
+.cell.wall {
+  background: #1976D2;
+}
+.cell.path {
+  background: #000;
+}
+.cell.ghost-entrance {
+  background: #222;
+  border-bottom: 3px solid #B0B6FF;
+}
+.cell.ghost-house {
+  background: #222;
+}
+.pellet {
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.power-pellet {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px 2px #fff;
+}
+.pacman {
+  width: 18px;
+  height: 18px;
+  background: #FFD046;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.ghost {
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.ghost-blinky { background: #FF0000; }
+.ghost-pinky  { background: #FFB8FF; }
+.ghost-inky   { background: #00FFFF; }
+.ghost-clyde  { background: #FFB852; }
+.ghost-frightened {
+  background: #1e90ff !important; /* Pac-Man frightened blue */
+  border-radius: 40% 40% 50% 50%/50% 50% 60% 60%;
+  box-shadow: 0 0 8px 2px #1e90ff;
+  /* Optionally, you can add a white border or animation for effect */
+} 

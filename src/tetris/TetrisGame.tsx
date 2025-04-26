@@ -14,6 +14,7 @@ const GRAVITY_INTERVAL = 600; // ms, will decrease with level
 
 const SCORE_TABLE = [0, 100, 300, 500, 800]; // lines cleared: 1,2,3,4
 const LINES_PER_LEVEL = 10;
+const HIGH_SCORE_KEY = 'tetris-high-score';
 
 function createEmptyPlayfield(): Playfield {
   return Array.from({ length: BOARD_HEIGHT }, () =>
@@ -133,6 +134,7 @@ const TetrisGame: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(() => {
     const playfield = createEmptyPlayfield();
     const activeTetromino = createTetromino(getRandomTetrominoType());
+    const highScore = Number(localStorage.getItem(HIGH_SCORE_KEY)) || 0;
     return {
       playfield,
       activeTetromino,
@@ -143,7 +145,7 @@ const TetrisGame: React.FC = () => {
       level: 1,
       lines: 0,
       status: GameStatus.Running,
-      highScore: 0,
+      highScore,
     };
   });
   const lastDropTime = useRef(performance.now());
@@ -406,6 +408,48 @@ const TetrisGame: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  // Update high score in localStorage
+  useEffect(() => {
+    if (gameState.score > gameState.highScore) {
+      localStorage.setItem(HIGH_SCORE_KEY, String(gameState.score));
+      setGameState(prev => ({ ...prev, highScore: gameState.score }));
+    }
+  }, [gameState.score, gameState.highScore]);
+
+  // Game over overlay
+  const handleRestart = () => {
+    setGameState(prev => {
+      const playfield = createEmptyPlayfield();
+      const activeTetromino = createTetromino(getRandomTetrominoType());
+      const highScore = Number(localStorage.getItem(HIGH_SCORE_KEY)) || 0;
+      return {
+        playfield,
+        activeTetromino,
+        nextTetrominoes: [getRandomTetrominoType(), getRandomTetrominoType(), getRandomTetrominoType()],
+        holdTetromino: null,
+        canHold: true,
+        score: 0,
+        level: 1,
+        lines: 0,
+        status: GameStatus.Running,
+        highScore,
+      };
+    });
+    setShowPause(false);
+  };
+
+  const GameOverOverlay = (
+    <Dialog open={gameState.status === GameStatus.GameOver}>
+      <DialogTitle>Game Over</DialogTitle>
+      <DialogContent>
+        <Typography variant="h6" sx={{ mb: 1 }}>Score: {gameState.score}</Typography>
+        <Typography variant="body1">Lines: {gameState.lines}</Typography>
+        <Typography variant="body2" sx={{ mb: 2 }}>High Score: {gameState.highScore}</Typography>
+        <Button variant="contained" onClick={handleRestart}>Restart</Button>
+      </DialogContent>
+    </Dialog>
+  );
+
   // Side panel UI
   const SidePanel = (
     <Paper elevation={2} sx={{ p: 2, minWidth: 120, bgcolor: 'background.paper', borderRadius: 3, mb: 2 }}>
@@ -431,6 +475,10 @@ const TetrisGame: React.FC = () => {
         <Box>
           <Typography variant="subtitle2" color="text.secondary">Lines</Typography>
           <Typography variant="h6">{gameState.lines}</Typography>
+        </Box>
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">High Score</Typography>
+          <Typography variant="h6">{gameState.highScore}</Typography>
         </Box>
         <Button
           variant="outlined"
@@ -571,6 +619,7 @@ const TetrisGame: React.FC = () => {
         </Box>
       </Box>
       {PauseOverlay}
+      {GameOverOverlay}
     </Box>
   );
 };
