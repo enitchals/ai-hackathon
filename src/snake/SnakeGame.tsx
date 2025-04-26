@@ -1,4 +1,4 @@
-import { Box, Typography, Button, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, Button, IconButton, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -14,9 +14,21 @@ type Position = {
 
 type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
 
-const GRID_SIZE = 20;
 const CELL_SIZE = 20;
-const INITIAL_SPEED = 150;
+const HIGH_SCORE_KEY = 'snake-high-score';
+const SPEED_KEY = 'snake-speed';
+const GRID_KEY = 'snake-grid-size';
+
+const SPEED_OPTIONS = [
+  { label: 'Slow', value: 250 },
+  { label: 'Normal', value: 150 },
+  { label: 'Fast', value: 80 },
+];
+const GRID_OPTIONS = [
+  { label: '10 x 10', value: 10 },
+  { label: '15 x 15', value: 15 },
+  { label: '20 x 20', value: 20 },
+];
 
 export default function SnakeGame() {
   const theme = useTheme();
@@ -26,15 +38,44 @@ export default function SnakeGame() {
   const [direction, setDirection] = useState<Direction>('RIGHT');
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const stored = localStorage.getItem(HIGH_SCORE_KEY);
+    return stored ? parseInt(stored, 10) : 0;
+  });
   const [isPaused, setIsPaused] = useState(false);
   const gameLoopRef = useRef<number | undefined>(undefined);
   const lastDirectionRef = useRef<Direction>('RIGHT');
+  const [showStartModal, setShowStartModal] = useState(true);
+  const [speed, setSpeed] = useState(() => {
+    const stored = localStorage.getItem(SPEED_KEY);
+    return stored ? parseInt(stored, 10) : 150;
+  });
+  const [gridSize, setGridSize] = useState(() => {
+    const stored = localStorage.getItem(GRID_KEY);
+    return stored ? parseInt(stored, 10) : 20;
+  });
+
+  // Update high score if needed
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score);
+      localStorage.setItem(HIGH_SCORE_KEY, String(score));
+    }
+  }, [score, highScore]);
+
+  // Update localStorage when settings change
+  useEffect(() => {
+    localStorage.setItem(SPEED_KEY, String(speed));
+  }, [speed]);
+  useEffect(() => {
+    localStorage.setItem(GRID_KEY, String(gridSize));
+  }, [gridSize]);
 
   // Generate new food position
   const generateFood = useCallback(() => {
     const newFood = {
-      x: Math.floor(Math.random() * GRID_SIZE),
-      y: Math.floor(Math.random() * GRID_SIZE)
+      x: Math.floor(Math.random() * gridSize),
+      y: Math.floor(Math.random() * gridSize)
     };
     
     // Make sure food doesn't spawn on snake
@@ -43,22 +84,22 @@ export default function SnakeGame() {
     }
     
     return newFood;
-  }, [snake]);
+  }, [snake, gridSize]);
 
   // Check for collisions
   const checkCollision = useCallback((head: Position) => {
     // Wall collision
-    if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+    if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
       return true;
     }
     
     // Self collision
     return snake.some(segment => segment.x === head.x && segment.y === head.y);
-  }, [snake]);
+  }, [snake, gridSize]);
 
   // Game loop
   useEffect(() => {
-    if (gameOver || isPaused) return;
+    if (gameOver || isPaused || showStartModal) return;
 
     const moveSnake = () => {
       setSnake(prevSnake => {
@@ -103,13 +144,13 @@ export default function SnakeGame() {
       });
     };
 
-    gameLoopRef.current = window.setInterval(moveSnake, INITIAL_SPEED);
+    gameLoopRef.current = window.setInterval(moveSnake, speed);
     return () => {
       if (gameLoopRef.current) {
         window.clearInterval(gameLoopRef.current);
       }
     };
-  }, [direction, food, gameOver, isPaused, checkCollision, generateFood]);
+  }, [direction, food, gameOver, isPaused, checkCollision, generateFood, showStartModal, speed]);
 
   // Handle keyboard input
   useEffect(() => {
@@ -209,13 +250,20 @@ export default function SnakeGame() {
               height: CELL_SIZE,
               backgroundColor: index === 0 ? theme.palette.primary.main : theme.palette.primary.light,
               border: `1px solid ${theme.palette.primary.dark}`,
-              boxShadow: index === 0 ? `0 0 4px ${theme.palette.primary.dark}` : 'none'
+              boxShadow: 'none'
             }}
           />
         ))}
       </>
     );
   };
+
+  // Show start modal on game over
+  useEffect(() => {
+    if (gameOver) {
+      setShowStartModal(true);
+    }
+  }, [gameOver]);
 
   return (
     <Box sx={{ 
@@ -225,6 +273,73 @@ export default function SnakeGame() {
       backgroundColor: theme.palette.background.default
     }}>
       <AppHeader title="Snake Game" />
+      {/* Start Modal */}
+      <Dialog
+        open={showStartModal}
+        onClose={() => setShowStartModal(false)}
+        maxWidth="xs"
+        fullWidth
+        aria-labelledby="snake-start-title"
+        aria-describedby="snake-start-desc"
+      >
+        <DialogTitle id="snake-start-title">Welcome to Snake!</DialogTitle>
+        <DialogContent>
+          <Typography gutterBottom id="snake-start-desc">
+            Use the arrow keys (or D-pad on mobile) to move the snake. Eat food to grow. Don't run into yourself or the wall!
+          </Typography>
+          <Typography gutterBottom>
+            Press <b>Space</b> to pause/resume. Try to beat your high score!
+          </Typography>
+          <Box mt={2}>
+            <Typography variant="subtitle1" gutterBottom>Speed:</Typography>
+            <Box display="flex" gap={1} mb={2}>
+              {SPEED_OPTIONS.map(opt => (
+                <Button
+                  key={opt.value}
+                  variant={speed === opt.value ? 'contained' : 'outlined'}
+                  color="primary"
+                  onClick={() => setSpeed(opt.value)}
+                  aria-label={`Set speed to ${opt.label}`}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+            </Box>
+            <Typography variant="subtitle1" gutterBottom>Grid Size:</Typography>
+            <Box display="flex" gap={1}>
+              {GRID_OPTIONS.map(opt => (
+                <Button
+                  key={opt.value}
+                  variant={gridSize === opt.value ? 'contained' : 'outlined'}
+                  color="primary"
+                  onClick={() => setGridSize(opt.value)}
+                  aria-label={`Set grid size to ${opt.label}`}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setShowStartModal(false);
+              setSnake([{ x: Math.floor(gridSize / 2), y: Math.floor(gridSize / 2) }]);
+              setDirection('RIGHT');
+              setGameOver(false);
+              setScore(0);
+              setFood({ x: 5 % gridSize, y: 5 % gridSize });
+              setIsPaused(false);
+            }}
+            autoFocus
+          >
+            Start Game
+          </Button>
+        </DialogActions>
+      </Dialog>
       
       <Box sx={{ 
         flexGrow: 1, 
@@ -235,20 +350,76 @@ export default function SnakeGame() {
         p: 2,
         backgroundColor: theme.palette.background.default
       }}>
-        <Box sx={{
-          width: GRID_SIZE * CELL_SIZE,
-          height: GRID_SIZE * CELL_SIZE,
-          border: `2px solid ${theme.palette.divider}`,
-          position: 'relative',
-          backgroundColor: theme.palette.background.paper,
-          mb: isMobile ? 2 : 0,
-          boxShadow: theme.shadows[2]
-        }}>
+        <Box
+          role="region"
+          aria-label="Snake game board"
+          sx={{
+            width: gridSize * CELL_SIZE,
+            height: gridSize * CELL_SIZE,
+            border: `2px solid ${theme.palette.divider}`,
+            position: 'relative',
+            backgroundColor: theme.palette.background.paper,
+            mb: isMobile ? 2 : 0,
+            boxShadow: theme.shadows[2]
+          }}
+        >
           {renderGameElements()}
+          {gameOver && (
+            <Box
+              role="dialog"
+              aria-label="Game over dialog"
+              aria-modal="true"
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(0,0,0,0.7)',
+                zIndex: 10,
+                borderRadius: 2,
+              }}
+            >
+              <Typography variant="h4" gutterBottom sx={{ color: theme.palette.text.primary }}>
+                Game Over!
+              </Typography>
+              <Typography variant="h6" sx={{ color: theme.palette.text.primary, mb: 1 }}>
+                Score: {score}
+              </Typography>
+              <Typography variant="h6" sx={{ color: theme.palette.text.primary, mb: 2 }}>
+                High Score: {highScore}
+              </Typography>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setSnake([{ x: Math.floor(gridSize / 2), y: Math.floor(gridSize / 2) }]);
+                  setDirection('RIGHT');
+                  setGameOver(false);
+                  setScore(0);
+                  setFood({ x: 5 % gridSize, y: 5 % gridSize });
+                }}
+                sx={{
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.primary.contrastText,
+                  '&:hover': { backgroundColor: theme.palette.primary.dark }
+                }}
+              >
+                Play Again
+              </Button>
+            </Box>
+          )}
         </Box>
 
-        <Typography variant="h6" sx={{ mb: 2, color: theme.palette.text.primary }}>
-          Score: {score}
+        <Typography
+          variant="h6"
+          sx={{ mb: 2, color: theme.palette.text.primary }}
+          aria-live="polite"
+        >
+          Score: {score} &nbsp; | &nbsp; High Score: {highScore}
         </Typography>
 
         {/* Mobile Controls */}
@@ -313,33 +484,13 @@ export default function SnakeGame() {
           </Box>
         )}
 
-        {gameOver && (
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Typography variant="h4" gutterBottom sx={{ color: theme.palette.text.primary }}>
-              Game Over!
-            </Typography>
-            <Button 
-              variant="contained" 
-              onClick={() => {
-                setSnake([{ x: 10, y: 10 }]);
-                setDirection('RIGHT');
-                setGameOver(false);
-                setScore(0);
-                setFood(generateFood());
-              }}
-              sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                '&:hover': { backgroundColor: theme.palette.primary.dark }
-              }}
-            >
-              Play Again
-            </Button>
-          </Box>
-        )}
-
         {isPaused && !gameOver && (
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Box
+            role="dialog"
+            aria-label="Pause dialog"
+            aria-modal="true"
+            sx={{ mt: 2, textAlign: 'center' }}
+          >
             <Typography variant="h4" sx={{ color: theme.palette.primary.main }}>
               Paused
             </Typography>

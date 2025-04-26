@@ -3,6 +3,8 @@ import AppHeader from '../components/AppHeader';
 import { Box, Button, Typography, IconButton } from '@mui/material';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const BOARD_WIDTH = 320;
 const BOARD_HEIGHT = 480;
@@ -16,6 +18,7 @@ const BRICK_HEIGHT = 20;
 const PADDLE_Y = BOARD_HEIGHT - 32;
 const PADDLE_SPEED = 24; // px per key press or button tap
 const BALL_SPEED = 4; // px per frame
+const HIGH_SCORE_KEY = 'brickbreaker-high-score';
 
 const BrickBreakerGame: React.FC = () => {
   const [paddleX, setPaddleX] = useState((BOARD_WIDTH - PADDLE_WIDTH) / 2);
@@ -47,6 +50,19 @@ const BrickBreakerGame: React.FC = () => {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const lifeLostRef = useRef(false);
+
+  // High score state
+  const [highScore, setHighScore] = useState(() => {
+    const raw = localStorage.getItem(HIGH_SCORE_KEY);
+    return raw ? parseInt(raw, 10) : 0;
+  });
+  const [showOnboarding, setShowOnboarding] = useState(() => sessionStorage.getItem('brickbreaker-onboarding-shown') !== '1');
+  const [showGameOver, setShowGameOver] = useState(false);
+  const [showStart, setShowStart] = useState(true);
+  const onboardingRef = useRef<HTMLDivElement>(null);
+  const gameOverRef = useRef<HTMLDivElement>(null);
+  const startRef = useRef<HTMLDivElement>(null);
+  const [mobilePress, setMobilePress] = useState<'left' | 'right' | null>(null);
 
   // Smooth paddle movement (run once, always animate toward latest target)
   useEffect(() => {
@@ -225,9 +241,64 @@ const BrickBreakerGame: React.FC = () => {
     }
   }, [lives]);
 
+  // High score update
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score);
+      localStorage.setItem(HIGH_SCORE_KEY, String(score));
+    }
+  }, [score, highScore]);
+
+  // Show game over overlay
+  useEffect(() => {
+    if (lives <= 0) {
+      setShowGameOver(true);
+      setTimeout(() => {
+        setShowGameOver(false);
+        setShowStart(true);
+      }, 1200);
+    }
+  }, [lives]);
+
+  // Focus trap for overlays
+  useEffect(() => {
+    if (showOnboarding && onboardingRef.current) onboardingRef.current.focus();
+    else if (showGameOver && gameOverRef.current) gameOverRef.current.focus();
+    else if (showStart && startRef.current) startRef.current.focus();
+  }, [showOnboarding, showGameOver, showStart]);
+
+  // Hide start button when running
+  useEffect(() => {
+    if (ball.moving) setShowStart(false);
+  }, [ball.moving]);
+
+  // Continuous press for mobile controls
+  useEffect(() => {
+    if (!mobilePress) return;
+    let raf: number;
+    let last = performance.now();
+    const step = (now: number) => {
+      const delta = now - last;
+      last = now;
+      if (mobilePress === 'left') movePaddle('left');
+      else if (mobilePress === 'right') movePaddle('right');
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [mobilePress]);
+
   // Start game button
   const handleStart = () => {
+    setShowStart(false);
+    setShowGameOver(false);
     if (!ball.moving) setBall(b => ({ ...b, moving: true }));
+  };
+
+  // Onboarding overlay
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    sessionStorage.setItem('brickbreaker-onboarding-shown', '1');
   };
 
   // Render bricks
@@ -270,17 +341,101 @@ const BrickBreakerGame: React.FC = () => {
           p: 2,
         }}
       >
-        <Typography variant="h4" gutterBottom>
-          Brick Breaker
-        </Typography>
-        <Typography variant="h6" gutterBottom>
-          Score: {score}
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          {Array.from({ length: lives }).map((_, i) => (
-            <Box key={i} sx={{ color: 'info.main', fontSize: 28, mx: 0.5 }}>
-              {'💙'}
+        {/* Onboarding/Instructions Overlay */}
+        {showOnboarding && (
+          <Box sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            bgcolor: 'rgba(0,0,0,0.7)',
+            zIndex: 1400,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+            onClick={handleCloseOnboarding}
+            role="dialog"
+            aria-modal="true"
+            aria-label="How to Play Instructions"
+          >
+            <Box ref={onboardingRef} tabIndex={-1} sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }} onClick={e => e.stopPropagation()}>
+              <Typography variant="h5" sx={{ mb: 2 }}><InfoOutlinedIcon sx={{ mr: 1, verticalAlign: 'middle' }} />How to Play</Typography>
+              <Typography sx={{ mb: 2 }}>
+                Break all the bricks!<br /><br />
+                Move the paddle left and right to bounce the ball and keep it in play.<br /><br />
+                <b>Controls:</b><br />
+                - <b>Arrow keys</b> or <b>on-screen buttons</b> to move<br />
+                - <b>Spacebar</b> or <b>Start</b> to launch the ball<br /><br />
+                Lose a life if you miss the ball. Game resets after 3 misses.<br /><br />
+                <b>Tip:</b> Hold down the on-screen buttons for smooth paddle movement on mobile!
+              </Typography>
+              <Box sx={{ textAlign: 'right', mt: 2 }}>
+                <button onClick={handleCloseOnboarding} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer' }} aria-label="Start Playing">Start Playing</button>
+              </Box>
             </Box>
+          </Box>
+        )}
+        {/* Start Overlay */}
+        {showStart && !showOnboarding && (
+          <Box sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            bgcolor: 'rgba(0,0,0,0.7)',
+            zIndex: 1400,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+            onClick={handleStart}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Start Game"
+          >
+            <Box ref={startRef} tabIndex={-1} sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }} onClick={e => e.stopPropagation()}>
+              <Typography variant="h5" sx={{ mb: 2 }}>Brick Breaker</Typography>
+              <Typography sx={{ mb: 2 }}>Tap or press <b>Start</b> to begin!</Typography>
+              <Box sx={{ textAlign: 'right', mt: 2 }}>
+                <button onClick={handleStart} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer' }} aria-label="Start Game">Start</button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+        {/* Game Over Overlay */}
+        {showGameOver && !showOnboarding && (
+          <Box sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            bgcolor: 'rgba(0,0,0,0.7)',
+            zIndex: 1400,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Game Over"
+          >
+            <Box ref={gameOverRef} tabIndex={-1} sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }}>
+              <Typography variant="h5" sx={{ mb: 2 }}>Game Over</Typography>
+              <Typography sx={{ mb: 2 }}>Your score: <b>{score}</b></Typography>
+              <Typography sx={{ mb: 2 }}>High score: <b>{highScore}</b></Typography>
+              <Typography sx={{ mb: 2 }}>Tap anywhere to play again!</Typography>
+            </Box>
+          </Box>
+        )}
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+          <Typography variant="h6" sx={{ mr: 2 }}>Score: {score}</Typography>
+          <Typography variant="h6" sx={{ mr: 2 }}>High: {highScore}</Typography>
+          {Array.from({ length: lives }).map((_, i) => (
+            <FavoriteIcon key={i} sx={{ color: 'error.main', fontSize: 28, mx: 0.5 }} aria-label="Life" />
           ))}
         </Box>
         <Box
@@ -330,17 +485,38 @@ const BrickBreakerGame: React.FC = () => {
           />
         </Box>
         {/* Mobile controls */}
-        <Box sx={{ display: { xs: 'flex', sm: 'none' }, gap: 2, mt: 1 }}>
-          <IconButton onClick={() => movePaddle('left')} size="large" color="primary">
-            <ArrowLeftIcon />
+        <Box sx={{ display: { xs: 'flex', sm: 'none' }, gap: 4, mt: 1, mb: 2, justifyContent: 'center' }}>
+          <IconButton
+            onMouseDown={() => setMobilePress('left')}
+            onMouseUp={() => setMobilePress(null)}
+            onMouseLeave={() => setMobilePress(null)}
+            onTouchStart={() => setMobilePress('left')}
+            onTouchEnd={() => setMobilePress(null)}
+            size="large"
+            color="primary"
+            sx={{ width: 72, height: 72, borderRadius: '50%', background: 'primary.main', color: '#fff', fontSize: 40, boxShadow: 2 }}
+            aria-label="Move Left"
+          >
+            <ArrowLeftIcon sx={{ fontSize: 40 }} />
           </IconButton>
-          <IconButton onClick={() => movePaddle('right')} size="large" color="primary">
-            <ArrowRightIcon />
+          <IconButton
+            onMouseDown={() => setMobilePress('right')}
+            onMouseUp={() => setMobilePress(null)}
+            onMouseLeave={() => setMobilePress(null)}
+            onTouchStart={() => setMobilePress('right')}
+            onTouchEnd={() => setMobilePress(null)}
+            size="large"
+            color="primary"
+            sx={{ width: 72, height: 72, borderRadius: '50%', background: 'primary.main', color: '#fff', fontSize: 40, boxShadow: 2 }}
+            aria-label="Move Right"
+          >
+            <ArrowRightIcon sx={{ fontSize: 40 }} />
           </IconButton>
         </Box>
-        <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleStart}>
-          {ball.moving ? 'Game Running' : 'Start Game'}
-        </Button>
+        {/* How to Play button */}
+        <Box sx={{ textAlign: 'right', width: '100%', maxWidth: 400, mb: 1 }}>
+          <button onClick={() => setShowOnboarding(true)} style={{ fontSize: '0.95rem', padding: '4px 12px', borderRadius: 6, border: 'none', background: '#0288d1', color: '#fff', cursor: 'pointer' }} aria-label="How to Play">How to Play</button>
+        </Box>
       </Box>
     </Box>
   );

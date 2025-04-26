@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography, TextField, Chip, Paper, Container } from '@mui/material';
+import { Box, Button, Typography, TextField, Chip, Paper, Container, Modal, IconButton } from '@mui/material';
 import AppHeader from '../components/AppHeader';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 // Dynamic imports for large word lists
 const pangramsPromise = import('../spelling-bee/pangrams.json');
@@ -37,7 +38,8 @@ function getAllPangrams(words: string[], letters: string[]) {
   });
 }
 
-const STORAGE_KEY = 'spelling-bee-puzzle-v1';
+const STORAGE_KEY = 'busy-bee-puzzle-v1';
+const ONBOARDING_KEY = 'busy-bee-onboarding-shown';
 
 interface Puzzle {
   letters: string[];
@@ -53,6 +55,9 @@ const SpellingBeeGame: React.FC = () => {
   const [message, setMessage] = useState('');
   const [showPangrams, setShowPangrams] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    return sessionStorage.getItem(ONBOARDING_KEY) !== '1';
+  });
 
   // Load or generate puzzle
   useEffect(() => {
@@ -132,48 +137,64 @@ const SpellingBeeGame: React.FC = () => {
     setLoading(false);
   };
 
+  // Onboarding overlay
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    sessionStorage.setItem(ONBOARDING_KEY, '1');
+  };
+
   if (loading || !puzzle) return <Typography>Loading...</Typography>;
 
   // Prepare outer letters (exclude center)
   const outerLetters = puzzle.letters.filter(l => l !== puzzle.center);
 
+  // Sort found words by length, then alphabetically
+  const sortedFoundWords = [...puzzle.foundWords].sort((a, b) =>
+    a.length !== b.length ? a.length - b.length : a.localeCompare(b)
+  );
+
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppHeader title="Spelling Bee" showBackButton showThemePicker />
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
+      <AppHeader title="Busy Bee" showBackButton showThemePicker />
       <Container maxWidth="sm" sx={{ py: 4, flexGrow: 1 }}>
         <Box textAlign="center" mb={2}>
+          <Box display="flex" justifyContent="flex-end" mb={1}>
+            <IconButton aria-label="How to Play" onClick={() => setShowOnboarding(true)} size="small">
+              <InfoOutlinedIcon />
+            </IconButton>
+          </Box>
           {/* True hexagon letter layout with clickable letter buttons */}
-          <Box position="relative" width={180} height={180} mx="auto" mb={2}>
+          <Box position="relative" width={180} height={180} mx="auto" mb={2} aria-label="Letter selection hexagon">
             {/* Top */}
             <Box position="absolute" left={70} top={0}>
-              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[0])}>{outerLetters[0].toUpperCase()}</Button>
+              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[0])} aria-label={`Add letter ${outerLetters[0].toUpperCase()}`}>{outerLetters[0].toUpperCase()}</Button>
             </Box>
             {/* Top right */}
             <Box position="absolute" left={120} top={35}>
-              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[1])}>{outerLetters[1].toUpperCase()}</Button>
+              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[1])} aria-label={`Add letter ${outerLetters[1].toUpperCase()}`}>{outerLetters[1].toUpperCase()}</Button>
             </Box>
             {/* Bottom right */}
             <Box position="absolute" left={120} top={105}>
-              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[2])}>{outerLetters[2].toUpperCase()}</Button>
+              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[2])} aria-label={`Add letter ${outerLetters[2].toUpperCase()}`}>{outerLetters[2].toUpperCase()}</Button>
             </Box>
             {/* Bottom */}
             <Box position="absolute" left={70} top={140}>
-              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[3])}>{outerLetters[3].toUpperCase()}</Button>
+              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[3])} aria-label={`Add letter ${outerLetters[3].toUpperCase()}`}>{outerLetters[3].toUpperCase()}</Button>
             </Box>
             {/* Bottom left */}
             <Box position="absolute" left={20} top={105}>
-              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[4])}>{outerLetters[4].toUpperCase()}</Button>
+              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[4])} aria-label={`Add letter ${outerLetters[4].toUpperCase()}`}>{outerLetters[4].toUpperCase()}</Button>
             </Box>
             {/* Top left */}
             <Box position="absolute" left={20} top={35}>
-              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[5])}>{outerLetters[5].toUpperCase()}</Button>
+              <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[5])} aria-label={`Add letter ${outerLetters[5].toUpperCase()}`}>{outerLetters[5].toUpperCase()}</Button>
             </Box>
             {/* Center */}
             <Box position="absolute" left={70} top={70}>
-              <Button variant="contained" color="primary" sx={{ fontWeight: 'bold', fontSize: 28, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%', boxShadow: 3 }} onClick={() => setGuess(guess + puzzle.center)}>{puzzle.center.toUpperCase()}</Button>
+              <Button variant="contained" color="primary" sx={{ fontWeight: 'bold', fontSize: 28, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%', boxShadow: 3 }} onClick={() => setGuess(guess + puzzle.center)} aria-label={`Add center letter ${puzzle.center.toUpperCase()}`}>{puzzle.center.toUpperCase()}</Button>
             </Box>
           </Box>
-          <Box mt={2}>
+          <Box mt={2} aria-label="Word entry">
             <TextField
               value={guess}
               onChange={e => setGuess(e.target.value)}
@@ -182,29 +203,46 @@ const SpellingBeeGame: React.FC = () => {
               variant="outlined"
               size="small"
               sx={{ mr: 1 }}
+              inputProps={{ 'aria-label': 'Word input' }}
             />
-            <Button variant="contained" onClick={handleGuess}>Submit</Button>
+            <Button variant="contained" onClick={handleGuess} aria-label="Submit word">Submit</Button>
           </Box>
-          {message && <Typography color="error" mt={1}>{message}</Typography>}
+          {message && <Typography color="error" mt={1} aria-live="polite">{message}</Typography>}
           <Box mt={2}>
-            <Button variant="outlined" onClick={handleNewGame} sx={{ mr: 1 }}>New Game</Button>
-            <Button variant="outlined" onClick={() => setShowPangrams(true)}>I give up, what's the pangram?</Button>
+            <Button variant="outlined" onClick={handleNewGame} sx={{ mr: 1 }} aria-label="New Game">New Game</Button>
+            <Button variant="outlined" onClick={() => setShowPangrams(true)} aria-label="I give up">I give up</Button>
           </Box>
         </Box>
-        <Paper sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h6">Found Words ({puzzle.foundWords.length}/{puzzle.validWords.length}):</Typography>
+        <Paper sx={{ p: 2, mb: 2 }} aria-label="Found words list">
+          <Typography variant="h6">Found Words:</Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-            {puzzle.foundWords.map(w => <Chip key={w} label={w} color="success" />)}
+            {sortedFoundWords.map(w => <Chip key={w} label={w} color="success" />)}
           </Box>
         </Paper>
         {showPangrams && (
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} aria-label="Pangram list">
             <Typography variant="h6">Pangram(s):</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
               {puzzle.pangrams.map(w => <Chip key={w} label={w} color="warning" />)}
             </Box>
+            <Box sx={{ textAlign: 'right', mt: 2 }}>
+              <Button variant="outlined" onClick={() => setShowPangrams(false)} aria-label="Close Pangram List">Close</Button>
+            </Box>
           </Paper>
         )}
+        <Modal open={showOnboarding} onClose={handleCloseOnboarding} aria-labelledby="busy-bee-onboarding-title" aria-modal="true">
+          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }}>
+            <Typography id="busy-bee-onboarding-title" variant="h5" sx={{ mb: 2 }}>How to Play Busy Bee</Typography>
+            <Typography sx={{ mb: 2 }}>
+              Make as many words as you can using the 7 letters.<br /><br />
+              Each word must be at least 4 letters and must include the center letter.<br /><br />
+              Letters can be used more than once. Find the pangram(s) that use all 7 letters for a bonus!
+            </Typography>
+            <Box sx={{ textAlign: 'right', mt: 2 }}>
+              <Button onClick={handleCloseOnboarding} variant="contained" aria-label="Start Playing">Start Playing</Button>
+            </Box>
+          </Box>
+        </Modal>
       </Container>
     </Box>
   );

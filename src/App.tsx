@@ -3,13 +3,13 @@ import { Container, Typography, Box, Card, CardActionArea, CardContent, GridLega
 import { useState } from 'react';
 import ADHDnDApp from './adhd-n-d/ADHDnDApp';
 import SnakeGame from './snake/SnakeGame';
-import WordleGame from './wordle/WordleGame';
+import WordlGame from './wordl/WordlGame';
 import ThemePickerModal from './ThemePickerModal';
 import { useThemeContext } from './ThemeContext';
 import SpellingBeeGame from './spelling-bee/SpellingBeeGame';
 import BrickBreakerGame from './brick-breaker';
 import D20Image from './assets/d20.png';
-import WordleImage from './assets/wordle.png';
+import WordlImage from './assets/wordl.png';
 import BrickBreakerImage from './assets/brick-breaker.png';
 import SpellingBeeImage from './assets/spelling-bee.png';
 import SnakeImage from './assets/snake.png';
@@ -56,10 +56,10 @@ function Gallery() {
           to: '/snake',
           preview: <img src={SnakeImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
         }, {
-          title: 'Wordle',
+          title: 'Wordl',
           description: 'A word-guessing game with color-coded feedback',
-          to: '/wordle',
-          preview: <img src={WordleImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+          to: '/wordl',
+          preview: <img src={WordlImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
         }, {
           title: 'Spelling Bee',
           description: 'Make as many words as you can from 7 letters. Find the pangram!',
@@ -122,7 +122,7 @@ function App() {
         <Route path="/" element={<Gallery />} />
         <Route path="/adhd-n-d" element={<ADHDnDApp />} />
         <Route path="/snake" element={<SnakeGame />} />
-        <Route path="/wordle" element={<WordleGame />} />
+        <Route path="/wordl" element={<WordlGame />} />
         <Route path="/spelling-bee" element={<SpellingBeeGame />} />
         <Route path="/brick-breaker" element={<BrickBreakerGame />} />
         <Route path="/racing-game" element={<RacingGame />} />
