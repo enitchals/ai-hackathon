@@ -13,6 +13,7 @@ import WordleImage from './assets/wordle.png';
 import BrickBreakerImage from './assets/brick-breaker.png';
 import SpellingBeeImage from './assets/spelling-bee.png';
 import SnakeImage from './assets/snake.png';
+import RacingGame from './racing-game';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -61,6 +62,11 @@ function Gallery() {
           description: 'Break all the bricks! Classic arcade fun.',
           to: '/brick-breaker',
           preview: <img src={BrickBreakerImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+        }, {
+          title: 'Racing Game',
+          description: 'Dodge obstacles and race for a high score! Emoji-powered fun.',
+          to: '/racing-game',
+          preview: <span style={{ fontSize: 80, display: 'block', textAlign: 'center' }}>🏎️</span>,
         }].map((app) => (
           <Grid item xs={12} sm={6} md={4} key={app.title} display="flex" justifyContent="center">
             <Card sx={{ width: 340, height: 340, p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
@@ -101,6 +107,7 @@ function App() {
         <Route path="/wordle" element={<WordleGame />} />
         <Route path="/spelling-bee" element={<SpellingBeeGame />} />
         <Route path="/brick-breaker" element={<BrickBreakerGame />} />
+        <Route path="/racing-game" element={<RacingGame />} />
       </Routes>
     </Router>
   );
