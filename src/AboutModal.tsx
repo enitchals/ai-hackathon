@@ -21,14 +21,17 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
         </Box>
       </DialogContent>
       <Box sx={{ px: 3, pb: 1 }}>
-        <Typography variant="caption" color="text.secondary" align="center" display="block" sx={{ mb: 0.5, textTransform: 'lowercase' }}>
+        <Typography variant="caption" color="text.secondary" align="left" display="block" sx={{ textTransform: 'lowercase' }}>
           coded by <a href="https://www.cursor.so" target="_blank" rel="noopener noreferrer" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500 }}>cursor</a>
         </Typography>
-        <Typography variant="caption" color="text.secondary" align="center" display="block" sx={{ textTransform: 'lowercase' }}>
-          project led by ellen nitchals |
+        <Typography variant="caption" color="text.secondary" align="left" display="block" sx={{ textTransform: 'lowercase' }}>
+          produced by ellen nitchals |
           <a href="https://github.com/enitchals" target="_blank" rel="noopener noreferrer" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500, marginLeft: 4, marginRight: 4 }}>github</a>|
           <a href="https://www.linkedin.com/in/enitchals/" target="_blank" rel="noopener noreferrer" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500, marginLeft: 4 }}>linkedin</a>
         </Typography>
+        <Typography variant="caption" color="text.secondary" align="left" display="block" sx={{ mb: 0.5, textTransform: 'lowercase' }}>
+          published april 26, 2025 | <a href="https://github.com/enitchals/ai-hackathon" target="_blank" rel="noopener noreferrer" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500, marginLeft: 4 }}>github repo</a>
+          </Typography>
       </Box>
       <DialogActions>
         <Button onClick={onClose} color="primary" sx={{ textTransform: 'lowercase' }}>close</Button>
