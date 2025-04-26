@@ -33,7 +33,6 @@ function DraggableTodoItem({ item, idx, onRemove }: DraggableTodoItemProps) {
   const theme = useTheme();
   return (
     <ListItem
-      role="listitem"
       ref={setNodeRef}
       divider
       dense
