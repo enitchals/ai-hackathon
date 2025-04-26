@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Tabs, Tab, Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
+import { Box, Tabs, Tab, Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography, useMediaQuery } from '@mui/material';
 import { TodoProvider, useTodo, TodoItem } from './TodoContext';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
@@ -48,6 +48,8 @@ const ADHDnDInner: React.FC = () => {
   const [timerDuration, setTimerDuration] = useState(300);
   const [timerLabel, setTimerLabel] = useState('Break Time! 🎉');
   const [showOnboard, setShowOnboard] = useState(false);
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const navLabels = ['tasks', 'completed', 'suggestions'];
 
   useEffect(() => {
     if (!localStorage.getItem(ONBOARD_KEY)) {
@@ -106,12 +108,19 @@ const ADHDnDInner: React.FC = () => {
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppHeader title="adhdnd">
-        <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} aria-label="adhdnd navigation tabs">
-          <Tab label="tasks" />
-          <Tab label="completed" />
-          <Tab label="suggestions" />
-        </Tabs>
+      <AppHeader
+        title="adhdnd"
+        navLabels={navLabels}
+        tab={tab}
+        onTabChange={setTab}
+      >
+        {!isMobile && (
+          <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} aria-label="adhdnd navigation tabs">
+            <Tab label="tasks" />
+            <Tab label="completed" />
+            <Tab label="suggestions" />
+          </Tabs>
+        )}
       </AppHeader>
       
       <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2 }}>
