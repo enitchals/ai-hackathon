@@ -32,40 +32,16 @@ function Gallery() {
   );
   const apps = [
     {
-      title: 'ADHDnD',
-      description: 'a d&d-inspired to-do adventure',
-      to: '/adhd-n-d',
-      preview: <img src={D20Image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
-    },
-    {
       title: 'Snake',
       description: 'classic snake game with modern controls',
       to: '/snake',
       preview: <img src={SnakeImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
     },
     {
-      title: 'Wordl',
-      description: 'a word-guessing game with color-coded feedback',
-      to: '/wordl',
-      preview: <img src={WordlImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
-    },
-    {
-      title: 'Busy Bee',
-      description: 'make as many words as you can from 7 letters. find the pangram!',
-      to: '/spelling-bee',
-      preview: <img src={SpellingBeeImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
-    },
-    {
       title: 'Brick Breaker',
       description: 'break all the bricks! classic arcade fun.',
       to: '/brick-breaker',
       preview: <img src={BrickBreakerImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
-    },
-    {
-      title: 'Racing Game',
-      description: 'dodge obstacles and race for a high score! emoji-powered fun.',
-      to: '/racing-game',
-      preview: <img src={RacingGameImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
     },
     {
       title: 'Tetris',
@@ -78,6 +54,30 @@ function Gallery() {
       description: 'the classic maze chase game, faithfully recreated!',
       to: '/pacman',
       preview: PacManPreview,
+    },
+    {
+      title: 'Busy Bee',
+      description: 'make as many words as you can from 7 letters. find the pangram!',
+      to: '/spelling-bee',
+      preview: <img src={SpellingBeeImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+    },
+    {
+      title: 'Wordl',
+      description: 'a word-guessing game with color-coded feedback',
+      to: '/wordl',
+      preview: <img src={WordlImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+    },
+    {
+      title: 'Racing Game',
+      description: 'dodge obstacles and race for a high score! emoji-powered fun.',
+      to: '/racing-game',
+      preview: <img src={RacingGameImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
+    },
+    {
+      title: 'ADHDnD',
+      description: 'a d&d-inspired to-do adventure',
+      to: '/adhd-n-d',
+      preview: <img src={D20Image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
     },
   ];
   return (
