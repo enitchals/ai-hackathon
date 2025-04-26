@@ -51,7 +51,7 @@ function Gallery() {
     },
     {
       title: 'Pac-Man',
-      description: 'the classic maze chase game, faithfully recreated!',
+      description: 'the classic maze chase game, faithfully* recreated!',
       to: '/pacman',
       preview: PacManPreview,
     },
