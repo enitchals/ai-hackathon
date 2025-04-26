@@ -8,7 +8,8 @@ import { Box, Typography, Button } from '@mui/material';
 
 const LANES = 3;
 const CAR_WIDTH = 64;
-const GAME_WIDTH = 400;
+const GAME_MAX_WIDTH = 450;
+const ROAD_WIDTH = GAME_MAX_WIDTH; // max width for road/lanes
 const GAME_HEIGHT = 600;
 const OBSTACLE_SIZE = 64;
 const OBSTACLE_EMOJIS = ['🪨', '🐄'];
@@ -18,9 +19,9 @@ const OBSTACLE_INTERVAL = 60; // frames between spawns
 const COIN_INTERVAL = 90; // frames between coin spawns
 const HIGH_SCORE_KEY = 'racinggame-high-score';
 
-const getLaneLeft = (lane: number) => {
-  // Evenly space lanes across the game width
-  const laneWidth = GAME_WIDTH / LANES;
+const getLaneLeft = (lane: number, roadWidth = ROAD_WIDTH) => {
+  // Evenly space lanes across the road width
+  const laneWidth = roadWidth / LANES;
   return laneWidth * lane + laneWidth / 2 - CAR_WIDTH / 2;
 };
 
@@ -43,6 +44,7 @@ const RacingGame: React.FC = () => {
   const nextId = useRef(1);
   const [laneLineOffset, setLaneLineOffset] = useState(0); // for moving dashed lines
   const isMobile = useMediaQuery('(max-width: 600px)');
+  const headerHeight = isMobile ? 56 : 64;
   const [highScore, setHighScore] = useState(() => {
     const raw = localStorage.getItem(HIGH_SCORE_KEY);
     return raw ? parseInt(raw, 10) : 0;
@@ -184,7 +186,7 @@ const RacingGame: React.FC = () => {
   // Lane marker rendering (now animated)
   const laneMarkers = [];
   for (let i = 1; i < LANES; i++) {
-    const left = (GAME_WIDTH / LANES) * i;
+    const left = (ROAD_WIDTH / LANES) * i;
     laneMarkers.push(
       <div
         key={i}
@@ -205,100 +207,193 @@ const RacingGame: React.FC = () => {
 
   return (
     <>
-      <AppHeader title="racing game" showBackButton showThemePicker />
-      <Box
-        sx={{
-          width: '100vw',
-          maxWidth: isMobile ? '100vw' : 400,
-          margin: '0 auto',
-          p: isMobile ? 0 : 2,
-          height: isMobile ? '100vh' : 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: isMobile ? 'center' : 'flex-start',
-          bgcolor: 'background.default',
-        }}
-      >
-        <Box sx={{ textAlign: 'center', color: 'text.primary', fontSize: 24, mb: 1, display: 'flex', justifyContent: 'center', gap: 3 }}>
-          <Typography variant="h6" sx={{ color: 'text.primary' }}>score: {score}</Typography>
-          <Typography variant="h6" sx={{ color: 'text.secondary' }}>high: {highScore}</Typography>
-        </Box>
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
+        <AppHeader title="racing game" showBackButton showThemePicker />
         <Box
           sx={{
-            width: isMobile ? '100vw' : GAME_WIDTH,
-            height: isMobile ? '100vh' : GAME_HEIGHT,
-            maxWidth: isMobile ? '100vw' : GAME_WIDTH,
-            maxHeight: isMobile ? '100vh' : GAME_HEIGHT,
-            bgcolor: '#222',
-            borderRadius: isMobile ? 0 : 2,
-            position: 'relative',
-            overflow: 'hidden',
+            flex: 1,
+            width: '100vw',
+            maxWidth: '100vw',
+            margin: '0 auto',
+            p: 0,
             display: 'flex',
-            alignItems: 'flex-end',
+            flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'center',
-            touchAction: 'none',
+            bgcolor: 'background.default',
           }}
         >
-          {/* Lane markers */}
-          {laneMarkers}
-          {/* Obstacles and coins */}
-          {obstacles.map((o) => (
-            <span
-              key={o.id}
-              style={{
-                position: 'absolute',
-                left: getLaneLeft(o.lane),
-                top: o.y,
-                width: OBSTACLE_SIZE,
-                height: OBSTACLE_SIZE,
-                fontSize: 48,
-                zIndex: 2,
-                pointerEvents: 'none',
-                userSelect: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {o.emoji}
-            </span>
-          ))}
-          {/* Car image at bottom, in selected lane */}
-          <img
-            src={CarImage}
-            alt="Car"
-            style={{
-              width: CAR_WIDTH,
-              height: 96,
-              position: 'absolute',
-              left: getLaneLeft(lane),
-              bottom: 16,
-              transition: 'left 0.15s cubic-bezier(.4,2,.6,1)',
-              pointerEvents: 'none',
-              userSelect: 'none',
-              zIndex: 3,
+          <Box sx={{ textAlign: 'center', color: 'text.primary', fontSize: 24, mb: 1, display: 'flex', justifyContent: 'center', gap: 3 }}>
+            <Typography variant="h6" sx={{ color: 'text.primary' }}>score: {score}</Typography>
+            <Typography variant="h6" sx={{ color: 'text.secondary' }}>high: {highScore}</Typography>
+          </Box>
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: GAME_MAX_WIDTH,
+              height: `calc(100vh - ${headerHeight}px)`,
+              maxHeight: GAME_HEIGHT,
+              bgcolor: '#222',
+              borderRadius: { xs: 0, sm: 2 },
+              position: 'relative',
+              overflow: 'hidden',
+              margin: '0 auto',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              touchAction: 'none',
             }}
-          />
-          {/* Boom effect on collision */}
-          {boom && (
-            <span
+          >
+            {/* Lane markers */}
+            {laneMarkers}
+            {/* Obstacles and coins */}
+            {obstacles.map((o) => (
+              <span
+                key={o.id}
+                style={{
+                  position: 'absolute',
+                  left: getLaneLeft(o.lane, ROAD_WIDTH),
+                  top: o.y,
+                  width: OBSTACLE_SIZE,
+                  height: OBSTACLE_SIZE,
+                  fontSize: 48,
+                  zIndex: 2,
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {o.emoji}
+              </span>
+            ))}
+            {/* Car image at bottom, in selected lane */}
+            <img
+              src={CarImage}
+              alt="Car"
               style={{
+                width: CAR_WIDTH,
+                height: 96,
                 position: 'absolute',
-                left: getLaneLeft(lane) + CAR_WIDTH / 2 - 32,
-                bottom: 16 + 32,
-                fontSize: 64,
-                zIndex: 4,
+                left: getLaneLeft(lane, ROAD_WIDTH),
+                bottom: 16,
+                transition: 'left 0.15s cubic-bezier(.4,2,.6,1)',
                 pointerEvents: 'none',
                 userSelect: 'none',
-                transition: 'opacity 0.5s',
+                zIndex: 3,
               }}
-            >
-              💥
-            </span>
-          )}
-          {/* Start overlay - now with extra note and MUI */}
-          {!started && !gameOver && (
+            />
+            {/* Boom effect on collision */}
+            {boom && (
+              <span
+                style={{
+                  position: 'absolute',
+                  left: getLaneLeft(lane, ROAD_WIDTH) + CAR_WIDTH / 2 - 32,
+                  bottom: 16 + 32,
+                  fontSize: 64,
+                  zIndex: 4,
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                  transition: 'opacity 0.5s',
+                }}
+              >
+                💥
+              </span>
+            )}
+            {/* Start overlay - now with extra note and MUI */}
+            {!started && !gameOver && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  bgcolor: 'rgba(0,0,0,0.7)',
+                  zIndex: 10,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                }}
+                onClick={() => setStarted(true)}
+                role="dialog"
+                aria-modal="true"
+                aria-label="start game"
+              >
+                <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>press <b>space</b> or tap to start!</Typography>
+                <Typography variant="body1" sx={{ mb: 2, color: '#fff' }}>
+                  use <b>arrow keys</b> to move / collect <span role="img" aria-label="coin">💰</span> and <span role="img" aria-label="coin">🪙</span> / avoid <span role="img" aria-label="rock">🪨</span> and <span role="img" aria-label="cow">🐄</span>
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  sx={{ fontSize: 20, px: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold', boxShadow: 3 }}
+                  onClick={e => { e.stopPropagation(); setStarted(true); }}
+                  aria-label="start game"
+                >
+                  start
+                </Button>
+              </Box>
+            )}
+            {/* Mobile controls: left/right buttons, fixed in left/right lanes */}
+            {isMobile && started && !gameOver && (
+              <>
+                <Button
+                  aria-label="Move Left"
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    left: 16,
+                    bottom: 24,
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    fontSize: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 2,
+                    zIndex: 20,
+                    opacity: 0.85,
+                  }}
+                  onClick={() => setLane((prev) => Math.max(0, prev - 1))}
+                  disabled={lane === 0}
+                >
+                  <ArrowBackIcon fontSize="inherit" />
+                </Button>
+                <Button
+                  aria-label="Move Right"
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    right: 16,
+                    bottom: 24,
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    fontSize: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 2,
+                    zIndex: 20,
+                    opacity: 0.85,
+                  }}
+                  onClick={() => setLane((prev) => Math.min(LANES - 1, prev + 1))}
+                  disabled={lane === LANES - 1}
+                >
+                  <ArrowForwardIcon fontSize="inherit" />
+                </Button>
+              </>
+            )}
+          </Box>
+          {/* Game Over Overlay */}
+          {gameOver && (
             <Box
               sx={{
                 position: 'absolute',
@@ -307,104 +402,35 @@ const RacingGame: React.FC = () => {
                 width: '100%',
                 height: '100%',
                 bgcolor: 'rgba(0,0,0,0.7)',
-                zIndex: 10,
+                zIndex: 30,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#fff',
+                textAlign: 'center',
               }}
-              onClick={() => setStarted(true)}
               role="dialog"
               aria-modal="true"
-              aria-label="start game"
+              aria-label="Game Over"
             >
-              <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>press <b>space</b> or tap to start!</Typography>
-              <Typography variant="body1" sx={{ mb: 2, color: '#fff' }}>
-                use <b>arrow keys</b> to move / collect <span role="img" aria-label="coin">💰</span> and <span role="img" aria-label="coin">🪙</span> / avoid <span role="img" aria-label="rock">🪨</span> and <span role="img" aria-label="cow">🐄</span>
-              </Typography>
-              <Button
-                variant="contained"
-                color="warning"
-                sx={{ fontSize: 20, px: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold', boxShadow: 3 }}
-                onClick={e => { e.stopPropagation(); setStarted(true); }}
-                aria-label="start game"
-              >
-                start
-              </Button>
+              <Box sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 8, p: 4, minWidth: 260, maxWidth: 340, mx: 'auto' }}>
+                <Typography variant="h4" sx={{ color: 'error.main', mb: 2 }}>game over!</Typography>
+                <Typography variant="h6" sx={{ color: 'text.primary', mb: 1 }}>score: {score}</Typography>
+                <Typography variant="h6" sx={{ color: 'text.secondary', mb: 2 }}>high: {highScore}</Typography>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  sx={{ fontSize: 20, px: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold', boxShadow: 3 }}
+                  onClick={restartGame}
+                  aria-label="restart game"
+                >
+                  restart
+                </Button>
+              </Box>
             </Box>
           )}
-          {/* Mobile controls: left/right buttons, fixed in left/right lanes */}
-          {isMobile && started && !gameOver && (
-            <>
-              <Button
-                aria-label="Move Left"
-                variant="contained"
-                color="primary"
-                sx={{
-                  position: 'absolute',
-                  left: 16,
-                  bottom: 24,
-                  width: 56,
-                  height: 56,
-                  borderRadius: '50%',
-                  fontSize: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: 2,
-                  zIndex: 20,
-                  opacity: 0.85,
-                }}
-                onClick={() => setLane((prev) => Math.max(0, prev - 1))}
-                disabled={lane === 0}
-              >
-                <ArrowBackIcon fontSize="inherit" />
-              </Button>
-              <Button
-                aria-label="Move Right"
-                variant="contained"
-                color="primary"
-                sx={{
-                  position: 'absolute',
-                  right: 16,
-                  bottom: 24,
-                  width: 56,
-                  height: 56,
-                  borderRadius: '50%',
-                  fontSize: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: 2,
-                  zIndex: 20,
-                  opacity: 0.85,
-                }}
-                onClick={() => setLane((prev) => Math.min(LANES - 1, prev + 1))}
-                disabled={lane === LANES - 1}
-              >
-                <ArrowForwardIcon fontSize="inherit" />
-              </Button>
-            </>
-          )}
         </Box>
-        {/* Game Over Overlay */}
-        {gameOver && (
-          <Box sx={{ textAlign: 'center', mt: 3 }} role="dialog" aria-modal="true" aria-label="Game Over">
-            <Typography variant="h4" sx={{ color: 'error.main', mb: 2 }}>game over!</Typography>
-            <Typography variant="h6" sx={{ color: 'text.primary', mb: 1 }}>score: {score}</Typography>
-            <Typography variant="h6" sx={{ color: 'text.secondary', mb: 2 }}>high: {highScore}</Typography>
-            <Button
-              variant="contained"
-              color="warning"
-              sx={{ fontSize: 20, px: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold', boxShadow: 3 }}
-              onClick={restartGame}
-              aria-label="restart game"
-            >
-              restart
-            </Button>
-          </Box>
-        )}
       </Box>
     </>
   );
