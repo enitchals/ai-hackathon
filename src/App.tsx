@@ -17,16 +17,14 @@ import RacingGame from './racing-game';
 import TetrisGame from './tetris';
 import TetrisImage from './assets/tetris.png';
 import RacingGameImage from './assets/racing-game.png';
+import PacManImage from './assets/pac-man.png';
 import PacMan from './pacman';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
   const { themeName, setThemeName } = useThemeContext();
   const PacManPreview = (
-    <svg width="100%" height="100%" viewBox="0 0 100 100" style={{ background: 'black', borderRadius: 12 }}>
-      <circle cx="50" cy="50" r="40" fill="#FFD046" />
-      <polygon points="50,50 90,30 90,70" fill="black" />
-    </svg>
+    <img src={PacManImage} alt="Pac-Man Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
   );
   return (
     <Container maxWidth="sm" sx={{ py: 4 }}>

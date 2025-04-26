@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import AppHeader from '../components/AppHeader';
-import { Box, Paper, Typography, Button, Stack, IconButton, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { Box, Paper, Typography, Button, Stack, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { tetrisTheme, TetrominoType } from './tetrisTheme';
 import { tetrominoShapes } from './tetrominoShapes';
-import { Playfield, PlayfieldCell, Tetromino, GameStatus, GameState } from './types';
+import { Playfield, Tetromino, GameStatus, GameState } from './types';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
@@ -231,7 +231,7 @@ const TetrisGame: React.FC = () => {
       if (now - lastDropTime.current > GRAVITY_INTERVAL) {
         lastDropTime.current = now;
         setGameState(prev => {
-          const { playfield, activeTetromino, nextTetrominoes, score, lines, level } = prev;
+          const { playfield, activeTetromino, nextTetrominoes, score, lines } = prev;
           if (canMove(playfield, activeTetromino, 1, 0)) {
             // Move down
             const nextTetromino = { ...activeTetromino, row: activeTetromino.row + 1 };
@@ -334,7 +334,7 @@ const TetrisGame: React.FC = () => {
       return;
     }
     setGameState(prev => {
-      let { activeTetromino, playfield, nextTetrominoes, score, lines, level } = prev;
+      let { activeTetromino, playfield, nextTetrominoes, score, lines } = prev;
       let moved = false;
       if (e.key === 'ArrowLeft') {
         if (canMove(playfield, activeTetromino, 0, -1)) {
@@ -412,13 +412,13 @@ const TetrisGame: React.FC = () => {
   useEffect(() => {
     if (gameState.score > gameState.highScore) {
       localStorage.setItem(HIGH_SCORE_KEY, String(gameState.score));
-      setGameState(prev => ({ ...prev, highScore: gameState.score }));
+      setGameState(prev => ({ ...prev, highScore: prev.score }));
     }
   }, [gameState.score, gameState.highScore]);
 
   // Game over overlay
   const handleRestart = () => {
-    setGameState(prev => {
+    setGameState(_ => {
       const playfield = createEmptyPlayfield();
       const activeTetromino = createTetromino(getRandomTetrominoType());
       const highScore = Number(localStorage.getItem(HIGH_SCORE_KEY)) || 0;
@@ -544,7 +544,7 @@ const TetrisGame: React.FC = () => {
         })}>▼</Button>
         <Button variant="contained" size="small" color="secondary" onClick={() => setGameState(prev => {
           if (prev.status !== GameStatus.Running) return prev;
-          let { activeTetromino, playfield, nextTetrominoes, score, lines, level } = prev;
+          let { activeTetromino, playfield, nextTetrominoes, score, lines } = prev;
           let dropRow = activeTetromino.row;
           while (canMove(playfield, { ...activeTetromino, row: dropRow + 1 }, 0, 0)) {
             dropRow++;

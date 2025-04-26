@@ -14,24 +14,6 @@ const GHOST_STARTS: Record<GhostName, Position> = {
 };
 
 const TILE_SIZE = 24; // px
-const WALL_COLOR = '#1976D2'; // Bright blue
-const PATH_COLOR = '#000'; // Black
-const GHOST_HOUSE_STROKE = '#B0B6FF'; // Light blue/gray for ghost house outline
-
-const ghostColors: Record<GhostName, string> = {
-  blinky: '#FF0000', // Red
-  pinky: '#FFB8FF',  // Pink
-  inky: '#00FFFF',   // Cyan
-  clyde: '#FFB852',  // Orange
-};
-
-// Ghost house rectangle (hardcoded for now, based on classic maze)
-const GHOST_HOUSE_RECT = {
-  x: 6 * TILE_SIZE,
-  y: 7 * TILE_SIZE,
-  width: 7 * TILE_SIZE,
-  height: 1 * TILE_SIZE,
-};
 
 const PacManGame: React.FC = () => {
   // Game state: 'start', 'running', 'paused', 'gameover'
@@ -81,7 +63,7 @@ const PacManGame: React.FC = () => {
 
   // Mode timer for scatter/chase
   const [ghostMode, setGhostMode] = useState<'scatter' | 'chase'>('scatter');
-  const [modeTimer, setModeTimer] = useState(0);
+  const [, setModeTimer] = useState(0);
 
   // Scatter/chase timing (ms, classic: 7s scatter, 20s chase, repeat)
   const SCATTER_TIME = 7000;
@@ -324,54 +306,6 @@ const PacManGame: React.FC = () => {
     return tile !== 'W';
   }
 
-  // Helper: Manhattan distance
-  function manhattan(a: Position, b: Position) {
-    return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
-  }
-
-  // Helper: get target tile for each ghost
-  function getGhostTarget(ghost: Ghost): Position {
-    if (ghostMode === 'scatter') {
-      // Scatter: each ghost targets its corner
-      return ghost.scatterTarget;
-    }
-    // Chase mode
-    if (ghost.name === 'blinky') {
-      // Blinky: target Pac-Man's current tile
-      return pacman.position;
-    }
-    if (ghost.name === 'pinky') {
-      // Pinky: target 4 tiles ahead of Pac-Man's direction
-      const offset = directionOffsets[pacman.direction || 'left'];
-      return {
-        row: pacman.position.row + 4 * offset.row,
-        col: pacman.position.col + 4 * offset.col,
-      };
-    }
-    if (ghost.name === 'inky') {
-      // Inky: vector from Blinky through 2 tiles ahead of Pac-Man, doubled
-      const blinky = ghosts.find(g => g.name === 'blinky') || ghost;
-      const offset = directionOffsets[pacman.direction || 'left'];
-      const tileAhead = {
-        row: pacman.position.row + 2 * offset.row,
-        col: pacman.position.col + 2 * offset.col,
-      };
-      return {
-        row: tileAhead.row + (tileAhead.row - blinky.position.row),
-        col: tileAhead.col + (tileAhead.col - blinky.position.col),
-      };
-    }
-    if (ghost.name === 'clyde') {
-      // Clyde: chase Pac-Man if far, else scatter
-      if (manhattan(ghost.position, pacman.position) > 8) {
-        return pacman.position;
-      } else {
-        return ghost.scatterTarget;
-      }
-    }
-    return ghost.scatterTarget;
-  }
-
   // Update ghost movement effect
   useEffect(() => {
     if (gameState !== 'running') return;
@@ -380,7 +314,6 @@ const PacManGame: React.FC = () => {
         const maze = mazeRef.current;
         const pacman = pacmanRef.current;
         const ghostMode = ghostModeRef.current;
-        const frightenedTimer = frightenedTimerRef.current;
         return prevGhosts.map((ghost) => {
           let { row, col } = ghost.position;
           let dir = ghost.direction ?? 'left';
