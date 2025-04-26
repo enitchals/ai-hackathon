@@ -31,7 +31,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ open, task, onDone, onGiveUp, onC
                 transform: 'translate(-50%, -75%)',
                 fontSize: '2rem',
                 fontWeight: 'bold',
-                color: 'black',
+                color: '#000000',
                 textShadow: '0 1px 4px rgba(255,255,255,0.7)',
                 userSelect: 'none',
               }}

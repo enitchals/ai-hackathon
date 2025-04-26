@@ -3,8 +3,9 @@ import { ThemeProvider, CssBaseline, createTheme, PaletteMode } from '@mui/mater
 
 // Theme names
 export const themes = [
-  'Bold Classic',
-  'Serene',
+  'boring',
+  'bold classic',
+  'serene',
 ] as const;
 export type Theme = typeof themes[number];
 
@@ -25,17 +26,41 @@ interface ThemeConfig {
 }
 
 export const THEMES: Record<string, ThemeConfig> = {
+  'boring': {
+    palette: {
+      mode: 'light',
+      primary: { main: '#000000' }, // dark color
+      secondary: { main: '#044389' }, // accent color
+      background: { default: '#FFFFFF', paper: '#FFFFFF' },
+      text: { primary: '#000000', secondary: '#000000' },
+      info: { main: '#044389' },
+      warning: { main: '#B80C09' },
+      error: { main: '#FFD046' },
+      success: { main: '#157F1F' },
+    },
+    components: {
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            '& .MuiInputBase-root': {
+              backgroundColor: '#FFFFFF',
+            },
+          },
+        },
+      },
+    },
+  },
   'Bold Classic': {
     palette: {
       mode: 'light',
-      primary: { main: '#241E4E' }, // Russian Violet - keeping this dark color for good contrast
-      secondary: { main: '#960200' }, // Penn Red - vibrant accent
-      background: { default: '#FFFFFF', paper: '#F8F8F8' }, // White with slightly off-white paper
-      text: { primary: '#1A1A1A', secondary: '#241E4E' }, // Near-black for best readability
-      info: { main: '#30BCED' }, // Process Cyan - vibrant but not harsh
-      warning: { main: '#FFD046' }, // Sunglow - warm accent
-      error: { main: '#960200' }, // Penn Red for errors
-      success: { main: '#2E7D32' }, // Forest Green - standard success color
+      primary: { main: '#241E4E' }, // dark color
+      secondary: { main: '#960200' }, // accent color
+      background: { default: '#FFFFFF', paper: '#F8F8F8' },
+      text: { primary: '#1A1A1A', secondary: '#241E4E' },
+      info: { main: '#30BCED' },
+      warning: { main: '#FFD046' },
+      error: { main: '#960200' },
+      success: { main: '#2E7D32' },
     },
     components: {
       MuiTextField: {
@@ -52,14 +77,14 @@ export const THEMES: Record<string, ThemeConfig> = {
   'Serene': {
     palette: {
       mode: 'light',
-      primary: { main: '#2B5876' }, // Deep Blue - darker version for better contrast
-      secondary: { main: '#B7DAE8' }, // Columbia Blue - soft accent
-      background: { default: '#EAFFFD', paper: '#EFEFF0' }, // Keeping Azure and Anti-flash White
-      text: { primary: '#1A1A1A', secondary: '#2B5876' }, // Near-black and Deep Blue
-      info: { main: '#2B5876' }, // Deep Blue for consistency
-      warning: { main: '#7C677F' }, // Darker Thistle - better contrast
-      error: { main: '#7C677F' }, // Darker Thistle for errors
-      success: { main: '#4A7C59' }, // Sage Green - natural success color
+      primary: { main: '#002642' }, // dark color
+      secondary: { main: '#7798AB' }, // accent color
+      background: { default: '#FFFFFF', paper: 'beige' },
+      text: { primary: '#000000', secondary: '#002642' },
+      info: { main: '#1F415A' },
+      warning: { main: '#EE7B30' },
+      error: { main: '#650D1B' },
+      success: { main: '#646536' },
     },
     components: {
       MuiTextField: {
