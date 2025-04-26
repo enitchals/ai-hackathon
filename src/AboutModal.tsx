@@ -16,7 +16,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
             this <b>ai hackathon gallery</b> is a collection of simple, modern web games and playful apps, built in one day as a single react + typescript codebase. each mini-app is standalone, mobile-friendly, and shares a unified theme system. the project demonstrates rapid prototyping, code organization, and ui consistency using material ui.
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ textTransform: 'lowercase' }}>
-            includes: adhd+d (d&d-inspired to-do), snake, wordle clone, busy bee, brick breaker, racing game, tetris, and pac-man. all apps are accessible from the main gallery.
+            includes: adhd+d, snake, wordle clone, busy bee, brick breaker, racing game, tetris, and pac-man. all apps are accessible from the main gallery.
           </Typography>
         </Box>
       </DialogContent>
