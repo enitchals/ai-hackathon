@@ -11,6 +11,8 @@ import BrickBreakerGame from './brick-breaker';
 import D20Image from './assets/d20.png';
 import WordleImage from './assets/wordle.png';
 import BrickBreakerImage from './assets/brick-breaker.png';
+import SpellingBeeImage from './assets/spelling-bee.png';
+import SnakeImage from './assets/snake.png';
 
 function Gallery() {
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -33,7 +35,7 @@ function Gallery() {
           Choose Theme
         </Button>
       </Box>
-      <Grid container spacing={3} justifyContent="center">
+      <Grid container spacing={4} justifyContent="center">
         {[{
           title: 'ADHDnD',
           description: 'A D&D-inspired to-do adventure',
@@ -43,7 +45,7 @@ function Gallery() {
           title: 'Snake',
           description: 'Classic snake game with modern controls',
           to: '/snake',
-          preview: <span role="img" aria-label="Snake" style={{ fontSize: 80, display: 'block', lineHeight: 1 }}>🐍</span>,
+          preview: <img src={SnakeImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
         }, {
           title: 'Wordle',
           description: 'A word-guessing game with color-coded feedback',
@@ -53,7 +55,7 @@ function Gallery() {
           title: 'Spelling Bee',
           description: 'Make as many words as you can from 7 letters. Find the pangram!',
           to: '/spelling-bee',
-          preview: <span role="img" aria-label="Bee" style={{ fontSize: 80, display: 'block', lineHeight: 1 }}>🐝</span>,
+          preview: <img src={SpellingBeeImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
         }, {
           title: 'Brick Breaker',
           description: 'Break all the bricks! Classic arcade fun.',
@@ -61,12 +63,12 @@ function Gallery() {
           preview: <img src={BrickBreakerImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />,
         }].map((app) => (
           <Grid item xs={12} sm={6} md={4} key={app.title} display="flex" justifyContent="center">
-            <Card sx={{ width: 260, height: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
-              <CardActionArea component={Link} to={app.to} sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
-                <Box sx={{ width: 120, height: 120, mt: 3, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Card sx={{ width: 340, height: 340, p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', boxShadow: 3 }}>
+              <CardActionArea component={Link} to={app.to} sx={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', p: 1 }}>
+                <Box sx={{ width: 150, height: 150, mt: 0, mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {app.preview}
                 </Box>
-                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
+                <CardContent sx={{ flexGrow: 1, textAlign: 'center', px: 0.5, py: 0 }}>
                   <Typography variant="h5" component="h2" gutterBottom>
                     {app.title}
                   </Typography>
