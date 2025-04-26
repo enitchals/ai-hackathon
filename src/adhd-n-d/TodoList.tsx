@@ -18,6 +18,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useTheme } from '@mui/material/styles';
 
 const MAX_VISIBLE = 19;
 
@@ -29,8 +30,10 @@ interface DraggableTodoItemProps {
 
 function DraggableTodoItem({ item, idx, onRemove }: DraggableTodoItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
+  const theme = useTheme();
   return (
     <ListItem
+      role="listitem"
       ref={setNodeRef}
       divider
       dense
@@ -52,7 +55,28 @@ function DraggableTodoItem({ item, idx, onRemove }: DraggableTodoItemProps) {
       {...listeners}
     >
       <ListItemText
-        primary={<span><strong>#{idx + 1}:</strong> {item.text}</span>}
+        primary={
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Box
+              sx={{
+                width: 28,
+                height: 28,
+                borderRadius: '50%',
+                bgcolor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                fontSize: 16,
+                flexShrink: 0,
+              }}
+            >
+              {idx + 1}
+            </Box>
+            {item.text}
+          </span>
+        }
       />
     </ListItem>
   );
@@ -95,7 +119,7 @@ const TodoList: React.FC = () => {
       </Box>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={visible.map((item) => item.id)} strategy={verticalListSortingStrategy}>
-          <List sx={{ maxHeight: '100%', overflowY: 'auto' }}>
+          <List sx={{ maxHeight: '100%', overflowY: 'auto' }} role="list" aria-label="To-Do List">
             {visible.map((item, idx) => (
               <DraggableTodoItem key={item.id} item={item} idx={idx} onRemove={removeTodo} />
             ))}

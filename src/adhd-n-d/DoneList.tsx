@@ -1,9 +1,11 @@
 import React from 'react';
 import { List, ListItem, ListItemText, Typography, Box, Button } from '@mui/material';
 import { useTodo } from './TodoContext';
+import { useTheme } from '@mui/material/styles';
 
 const DoneList: React.FC = () => {
   const { doneList, clearDoneList } = useTodo();
+  const theme = useTheme();
 
   if (doneList.length === 0) {
     return (
@@ -25,11 +27,32 @@ const DoneList: React.FC = () => {
           Clear List
         </Button>
       </Box>
-      <List>
+      <List role="list" aria-label="Completed Tasks List">
         {doneList.map((item, idx) => (
-          <ListItem key={item.id} divider dense>
+          <ListItem key={item.id} divider dense role="listitem">
             <ListItemText
-              primary={<span><strong>#{idx + 1}:</strong> {item.text}</span>}
+              primary={
+                <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Box
+                    sx={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: '50%',
+                      bgcolor: theme.palette.primary.main,
+                      color: theme.palette.primary.contrastText,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700,
+                      fontSize: 16,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {idx + 1}
+                  </Box>
+                  {item.text}
+                </span>
+              }
             />
           </ListItem>
         ))}
