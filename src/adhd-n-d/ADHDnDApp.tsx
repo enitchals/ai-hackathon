@@ -106,11 +106,11 @@ const ADHDnDInner: React.FC = () => {
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppHeader title="ADHDnD">
-        <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} aria-label="ADHDnD navigation tabs">
-          <Tab label="Tasks" />
-          <Tab label="Completed" />
-          <Tab label="Suggestions" />
+      <AppHeader title="adhdnd">
+        <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)} aria-label="adhdnd navigation tabs">
+          <Tab label="tasks" />
+          <Tab label="completed" />
+          <Tab label="suggestions" />
         </Tabs>
       </AppHeader>
       
@@ -119,22 +119,22 @@ const ADHDnDInner: React.FC = () => {
           <>
             <D20Roller onRoll={handleRoll} />
             <AddTodoForm />
-            <Typography variant="h6" fontWeight={700} gutterBottom>To-Do List</Typography>
+            <Typography variant="h6" fontWeight={700} gutterBottom>to-do list</Typography>
             <TodoList />
           </>
         ) : tab === 1 ? (
           <>
-            <Typography variant="h6" fontWeight={700} gutterBottom>Done List</Typography>
+            <Typography variant="h6" fontWeight={700} gutterBottom>done list</Typography>
             <DoneList />
           </>
         ) : (
           <Box>
-            <Typography variant="h6" fontWeight={700} gutterBottom>Suggested Tasks</Typography>
+            <Typography variant="h6" fontWeight={700} gutterBottom>suggested tasks</Typography>
             <Box sx={{ maxHeight: 400, overflowY: 'auto' }} aria-label="Suggested Tasks List">
               {SUGGESTED_TASKS.filter(
                 (task) => !todoList.some((t) => t.text === task)
               ).length === 0 ? (
-                <Typography color="text.secondary">No more suggestions available!</Typography>
+                <Typography color="text.secondary">no more suggestions available!</Typography>
               ) : (
                 SUGGESTED_TASKS.filter(
                   (task) => !todoList.some((t) => t.text === task)
@@ -143,13 +143,13 @@ const ADHDnDInner: React.FC = () => {
                     <Button
                       variant="outlined"
                       size="small"
-                      aria-label={`Add suggested task: ${task}`}
+                      aria-label={`add suggested task: ${task}`}
                       onClick={() => handleAddSuggestion(task)}
                       sx={{ mr: 1 }}
                     >
                       +
                     </Button>
-                    <Typography sx={{ flexGrow: 1 }}>{task}</Typography>
+                    <Typography sx={{ flexGrow: 1 }}>{task.toLowerCase()}</Typography>
                   </Box>
                 ))
               )}
@@ -159,7 +159,7 @@ const ADHDnDInner: React.FC = () => {
       </Box>
 
       <Box mt={2}>
-        <Button variant="outlined" color="primary" onClick={() => handleTakeBreak(300)} sx={{ mr: 1 }}>Take a 5-min Break</Button>
+        <Button variant="outlined" color="primary" onClick={() => handleTakeBreak(300)} sx={{ mr: 1 }}>take a 5-min break</Button>
         <Button variant="outlined" color="primary" onClick={() => handleTakeBreak(600)} sx={{ mr: 1 }}>10-min</Button>
         <Button variant="outlined" color="primary" onClick={() => handleTakeBreak(1200)}>20-min</Button>
       </Box>
@@ -183,16 +183,16 @@ const ADHDnDInner: React.FC = () => {
         showEndButton={true}
       />
       <Dialog open={showOnboard} onClose={handleOnboardClose} maxWidth="xs" fullWidth>
-        <DialogTitle>Welcome to ADHDnD!</DialogTitle>
+        <DialogTitle>welcome to adhdnd!</DialogTitle>
         <DialogContent>
           <Box sx={{ my: 2 }}>
-            <Typography gutterBottom>Keep your tasks small and specific - ideally no more than 5-10 minutes. Roll the die to pick your next task!</Typography>
-            <Typography gutterBottom>Good luck, Adventurer!</Typography>
+            <Typography gutterBottom>keep your tasks small and specific - ideally no more than 5-10 minutes. roll the die to pick your next task!</Typography>
+            <Typography gutterBottom>good luck, adventurer!</Typography>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="primary" onClick={handleOnboardClose} autoFocus>
-            Get Started
+            get started
           </Button>
         </DialogActions>
       </Dialog>

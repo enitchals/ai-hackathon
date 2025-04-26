@@ -89,10 +89,10 @@ const TimerModal: React.FC<TimerModalProps> = ({ open, onClose, duration, label,
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-      <DialogTitle>{label}</DialogTitle>
+      <DialogTitle>{label && typeof label === 'string' ? label.toLowerCase() : label}</DialogTitle>
       <DialogContent>
         <Typography align="center" variant="h6" gutterBottom>
-          {label}
+          {label && typeof label === 'string' ? label.toLowerCase() : label}
         </Typography>
         <Box
           textAlign="center"
@@ -110,12 +110,12 @@ const TimerModal: React.FC<TimerModalProps> = ({ open, onClose, duration, label,
       <DialogActions sx={{ justifyContent: 'center' }}>
         {showStartButton && !started && (
           <Button variant="contained" color="primary" onClick={handleStart}>
-            Start
+            start
           </Button>
         )}
         {showEndButton && (
           <Button variant="outlined" color="secondary" onClick={handleClose}>
-            End
+            end
           </Button>
         )}
       </DialogActions>

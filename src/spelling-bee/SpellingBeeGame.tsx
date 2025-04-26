@@ -155,16 +155,16 @@ const SpellingBeeGame: React.FC = () => {
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
-      <AppHeader title="Busy Bee" showBackButton showThemePicker />
+      <AppHeader title="busy bee" showBackButton showThemePicker />
       <Container maxWidth="sm" sx={{ py: 4, flexGrow: 1 }}>
         <Box textAlign="center" mb={2}>
           <Box display="flex" justifyContent="flex-end" mb={1}>
-            <IconButton aria-label="How to Play" onClick={() => setShowOnboarding(true)} size="small">
+            <IconButton aria-label="how to play" onClick={() => setShowOnboarding(true)} size="small">
               <InfoOutlinedIcon />
             </IconButton>
           </Box>
           {/* True hexagon letter layout with clickable letter buttons */}
-          <Box position="relative" width={180} height={180} mx="auto" mb={2} aria-label="Letter selection hexagon">
+          <Box position="relative" width={180} height={180} mx="auto" mb={2} aria-label="letter selection hexagon">
             {/* Top */}
             <Box position="absolute" left={70} top={0}>
               <Button variant="contained" color="secondary" sx={{ fontSize: 24, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%' }} onClick={() => setGuess(guess + outerLetters[0])} aria-label={`Add letter ${outerLetters[0].toUpperCase()}`}>{outerLetters[0].toUpperCase()}</Button>
@@ -194,52 +194,52 @@ const SpellingBeeGame: React.FC = () => {
               <Button variant="contained" color="primary" sx={{ fontWeight: 'bold', fontSize: 28, width: 48, height: 48, minWidth: 48, minHeight: 48, borderRadius: '50%', boxShadow: 3 }} onClick={() => setGuess(guess + puzzle.center)} aria-label={`Add center letter ${puzzle.center.toUpperCase()}`}>{puzzle.center.toUpperCase()}</Button>
             </Box>
           </Box>
-          <Box mt={2} aria-label="Word entry">
+          <Box mt={2} aria-label="word entry">
             <TextField
               value={guess}
               onChange={e => setGuess(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') handleGuess(); }}
-              label="Enter word"
+              label="enter word"
               variant="outlined"
               size="small"
               sx={{ mr: 1 }}
-              inputProps={{ 'aria-label': 'Word input' }}
+              inputProps={{ 'aria-label': 'word input' }}
             />
-            <Button variant="contained" onClick={handleGuess} aria-label="Submit word">Submit</Button>
+            <Button variant="contained" onClick={handleGuess} aria-label="submit word">submit</Button>
           </Box>
-          {message && <Typography color="error" mt={1} aria-live="polite">{message}</Typography>}
+          {message && <Typography color="error" mt={1} aria-live="polite">{message.toLowerCase()}</Typography>}
           <Box mt={2}>
-            <Button variant="outlined" onClick={handleNewGame} sx={{ mr: 1 }} aria-label="New Game">New Game</Button>
-            <Button variant="outlined" onClick={() => setShowPangrams(true)} aria-label="I give up">I give up</Button>
+            <Button variant="outlined" onClick={handleNewGame} sx={{ mr: 1 }} aria-label="new game">new game</Button>
+            <Button variant="outlined" onClick={() => setShowPangrams(true)} aria-label="i give up">i give up</Button>
           </Box>
         </Box>
-        <Paper sx={{ p: 2, mb: 2 }} aria-label="Found words list">
-          <Typography variant="h6">Found Words:</Typography>
+        <Paper sx={{ p: 2, mb: 2 }} aria-label="found words list">
+          <Typography variant="h6">found words:</Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
             {sortedFoundWords.map(w => <Chip key={w} label={w} color="success" />)}
           </Box>
         </Paper>
         {showPangrams && (
-          <Paper sx={{ p: 2, mb: 2 }} aria-label="Pangram list">
-            <Typography variant="h6">Pangram(s):</Typography>
+          <Paper sx={{ p: 2, mb: 2 }} aria-label="pangram list">
+            <Typography variant="h6">pangram(s):</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
               {puzzle.pangrams.map(w => <Chip key={w} label={w} color="warning" />)}
             </Box>
             <Box sx={{ textAlign: 'right', mt: 2 }}>
-              <Button variant="outlined" onClick={() => setShowPangrams(false)} aria-label="Close Pangram List">Close</Button>
+              <Button variant="outlined" onClick={() => setShowPangrams(false)} aria-label="close pangram list">close</Button>
             </Box>
           </Paper>
         )}
         <Modal open={showOnboarding} onClose={handleCloseOnboarding} aria-labelledby="busy-bee-onboarding-title" aria-modal="true">
           <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }}>
-            <Typography id="busy-bee-onboarding-title" variant="h5" sx={{ mb: 2 }}>How to Play Busy Bee</Typography>
+            <Typography id="busy-bee-onboarding-title" variant="h5" sx={{ mb: 2 }}>how to play busy bee</Typography>
             <Typography sx={{ mb: 2 }}>
-              Make as many words as you can using the 7 letters.<br /><br />
-              Each word must be at least 4 letters and must include the center letter.<br /><br />
-              Letters can be used more than once. Find the pangram(s) that use all 7 letters for a bonus!
+              make as many words as you can using the 7 letters.<br /><br />
+              each word must be at least 4 letters and must include the center letter.<br /><br />
+              letters can be used more than once. find the pangram(s) that use all 7 letters for a bonus!
             </Typography>
             <Box sx={{ textAlign: 'right', mt: 2 }}>
-              <Button onClick={handleCloseOnboarding} variant="contained" aria-label="Start Playing">Start Playing</Button>
+              <Button onClick={handleCloseOnboarding} variant="contained" aria-label="start playing">start playing</Button>
             </Box>
           </Box>
         </Modal>

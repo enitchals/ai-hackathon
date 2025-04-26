@@ -272,7 +272,7 @@ export default function SnakeGame() {
       flexDirection: 'column',
       backgroundColor: theme.palette.background.default
     }}>
-      <AppHeader title="Snake Game" />
+      <AppHeader title="snake game" />
       {/* Start Modal */}
       <Dialog
         open={showStartModal}
@@ -282,16 +282,16 @@ export default function SnakeGame() {
         aria-labelledby="snake-start-title"
         aria-describedby="snake-start-desc"
       >
-        <DialogTitle id="snake-start-title">Welcome to Snake!</DialogTitle>
+        <DialogTitle id="snake-start-title">welcome to snake!</DialogTitle>
         <DialogContent>
           <Typography gutterBottom id="snake-start-desc">
-            Use the arrow keys (or D-pad on mobile) to move the snake. Eat food to grow. Don't run into yourself or the wall!
+            use the arrow keys (or d-pad on mobile) to move the snake. eat food to grow. don't run into yourself or the wall!
           </Typography>
           <Typography gutterBottom>
-            Press <b>Space</b> to pause/resume. Try to beat your high score!
+            press <b>space</b> to pause/resume. try to beat your high score!
           </Typography>
           <Box mt={2}>
-            <Typography variant="subtitle1" gutterBottom>Speed:</Typography>
+            <Typography variant="subtitle1" gutterBottom>speed:</Typography>
             <Box display="flex" gap={1} mb={2}>
               {SPEED_OPTIONS.map(opt => (
                 <Button
@@ -299,13 +299,13 @@ export default function SnakeGame() {
                   variant={speed === opt.value ? 'contained' : 'outlined'}
                   color="primary"
                   onClick={() => setSpeed(opt.value)}
-                  aria-label={`Set speed to ${opt.label}`}
+                  aria-label={`set speed to ${opt.label.toLowerCase()}`}
                 >
-                  {opt.label}
+                  {opt.label.toLowerCase()}
                 </Button>
               ))}
             </Box>
-            <Typography variant="subtitle1" gutterBottom>Grid Size:</Typography>
+            <Typography variant="subtitle1" gutterBottom>grid size:</Typography>
             <Box display="flex" gap={1}>
               {GRID_OPTIONS.map(opt => (
                 <Button
@@ -313,9 +313,9 @@ export default function SnakeGame() {
                   variant={gridSize === opt.value ? 'contained' : 'outlined'}
                   color="primary"
                   onClick={() => setGridSize(opt.value)}
-                  aria-label={`Set grid size to ${opt.label}`}
+                  aria-label={`set grid size to ${opt.label.toLowerCase()}`}
                 >
-                  {opt.label}
+                  {opt.label.toLowerCase()}
                 </Button>
               ))}
             </Box>
@@ -336,7 +336,7 @@ export default function SnakeGame() {
             }}
             autoFocus
           >
-            Start Game
+            start game
           </Button>
         </DialogActions>
       </Dialog>
@@ -367,7 +367,7 @@ export default function SnakeGame() {
           {gameOver && (
             <Box
               role="dialog"
-              aria-label="Game over dialog"
+              aria-label="game over dialog"
               aria-modal="true"
               sx={{
                 position: 'absolute',
@@ -385,13 +385,13 @@ export default function SnakeGame() {
               }}
             >
               <Typography variant="h4" gutterBottom sx={{ color: theme.palette.text.primary }}>
-                Game Over!
+                game over!
               </Typography>
               <Typography variant="h6" sx={{ color: theme.palette.text.primary, mb: 1 }}>
-                Score: {score}
+                score: {score}
               </Typography>
               <Typography variant="h6" sx={{ color: theme.palette.text.primary, mb: 2 }}>
-                High Score: {highScore}
+                high score: {highScore}
               </Typography>
               <Button
                 variant="contained"
@@ -408,7 +408,7 @@ export default function SnakeGame() {
                   '&:hover': { backgroundColor: theme.palette.primary.dark }
                 }}
               >
-                Play Again
+                play again
               </Button>
             </Box>
           )}
@@ -419,7 +419,7 @@ export default function SnakeGame() {
           sx={{ mb: 2, color: theme.palette.text.primary }}
           aria-live="polite"
         >
-          Score: {score} &nbsp; | &nbsp; High Score: {highScore}
+          score: {score} &nbsp; | &nbsp; high score: {highScore}
         </Typography>
 
         {/* Mobile Controls */}

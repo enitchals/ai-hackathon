@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AppHeader from '../components/AppHeader';
-import { Box, Button, Typography, IconButton } from '@mui/material';
+import { Box, Typography, IconButton } from '@mui/material';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -276,10 +276,7 @@ const BrickBreakerGame: React.FC = () => {
   useEffect(() => {
     if (!mobilePress) return;
     let raf: number;
-    let last = performance.now();
-    const step = (now: number) => {
-      const delta = now - last;
-      last = now;
+    const step = () => {
       if (mobilePress === 'left') movePaddle('left');
       else if (mobilePress === 'right') movePaddle('right');
       raf = requestAnimationFrame(step);
@@ -330,7 +327,7 @@ const BrickBreakerGame: React.FC = () => {
         flexDirection: 'column',
       }}
     >
-      <AppHeader title="Brick Breaker" showBackButton />
+      <AppHeader title="brick breaker" showBackButton />
       <Box
         sx={{
           flex: 1,
@@ -358,21 +355,21 @@ const BrickBreakerGame: React.FC = () => {
             onClick={handleCloseOnboarding}
             role="dialog"
             aria-modal="true"
-            aria-label="How to Play Instructions"
+            aria-label="how to play instructions"
           >
             <Box ref={onboardingRef} tabIndex={-1} sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }} onClick={e => e.stopPropagation()}>
-              <Typography variant="h5" sx={{ mb: 2 }}><InfoOutlinedIcon sx={{ mr: 1, verticalAlign: 'middle' }} />How to Play</Typography>
+              <Typography variant="h5" sx={{ mb: 2 }}><InfoOutlinedIcon sx={{ mr: 1, verticalAlign: 'middle' }} />how to play</Typography>
               <Typography sx={{ mb: 2 }}>
-                Break all the bricks!<br /><br />
-                Move the paddle left and right to bounce the ball and keep it in play.<br /><br />
-                <b>Controls:</b><br />
-                - <b>Arrow keys</b> or <b>on-screen buttons</b> to move<br />
-                - <b>Spacebar</b> or <b>Start</b> to launch the ball<br /><br />
-                Lose a life if you miss the ball. Game resets after 3 misses.<br /><br />
-                <b>Tip:</b> Hold down the on-screen buttons for smooth paddle movement on mobile!
+                break all the bricks!<br /><br />
+                move the paddle left and right to bounce the ball and keep it in play.<br /><br />
+                <b>controls:</b><br />
+                - <b>arrow keys</b> or <b>on-screen buttons</b> to move<br />
+                - <b>spacebar</b> or <b>start</b> to launch the ball<br /><br />
+                lose a life if you miss the ball. game resets after 3 misses.<br /><br />
+                <b>tip:</b> hold down the on-screen buttons for smooth paddle movement on mobile!
               </Typography>
               <Box sx={{ textAlign: 'right', mt: 2 }}>
-                <button onClick={handleCloseOnboarding} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer' }} aria-label="Start Playing">Start Playing</button>
+                <button onClick={handleCloseOnboarding} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer' }} aria-label="start playing">start playing</button>
               </Box>
             </Box>
           </Box>
@@ -394,13 +391,13 @@ const BrickBreakerGame: React.FC = () => {
             onClick={handleStart}
             role="dialog"
             aria-modal="true"
-            aria-label="Start Game"
+            aria-label="start game"
           >
             <Box ref={startRef} tabIndex={-1} sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }} onClick={e => e.stopPropagation()}>
-              <Typography variant="h5" sx={{ mb: 2 }}>Brick Breaker</Typography>
-              <Typography sx={{ mb: 2 }}>Tap or press <b>Start</b> to begin!</Typography>
+              <Typography variant="h5" sx={{ mb: 2 }}>brick breaker</Typography>
+              <Typography sx={{ mb: 2 }}>tap or press <b>start</b> to begin!</Typography>
               <Box sx={{ textAlign: 'right', mt: 2 }}>
-                <button onClick={handleStart} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer' }} aria-label="Start Game">Start</button>
+                <button onClick={handleStart} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer' }} aria-label="start game">start</button>
               </Box>
             </Box>
           </Box>
@@ -421,21 +418,21 @@ const BrickBreakerGame: React.FC = () => {
           }}
             role="dialog"
             aria-modal="true"
-            aria-label="Game Over"
+            aria-label="game over"
           >
             <Box ref={gameOverRef} tabIndex={-1} sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }}>
-              <Typography variant="h5" sx={{ mb: 2 }}>Game Over</Typography>
-              <Typography sx={{ mb: 2 }}>Your score: <b>{score}</b></Typography>
-              <Typography sx={{ mb: 2 }}>High score: <b>{highScore}</b></Typography>
-              <Typography sx={{ mb: 2 }}>Tap anywhere to play again!</Typography>
+              <Typography variant="h5" sx={{ mb: 2 }}>game over</Typography>
+              <Typography sx={{ mb: 2 }}>your score: <b>{score}</b></Typography>
+              <Typography sx={{ mb: 2 }}>high score: <b>{highScore}</b></Typography>
+              <Typography sx={{ mb: 2 }}>tap anywhere to play again!</Typography>
             </Box>
           </Box>
         )}
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <Typography variant="h6" sx={{ mr: 2 }}>Score: {score}</Typography>
-          <Typography variant="h6" sx={{ mr: 2 }}>High: {highScore}</Typography>
+          <Typography variant="h6" sx={{ mr: 2 }}>score: {score}</Typography>
+          <Typography variant="h6" sx={{ mr: 2 }}>high: {highScore}</Typography>
           {Array.from({ length: lives }).map((_, i) => (
-            <FavoriteIcon key={i} sx={{ color: 'error.main', fontSize: 28, mx: 0.5 }} aria-label="Life" />
+            <FavoriteIcon key={i} sx={{ color: 'error.main', fontSize: 28, mx: 0.5 }} aria-label="life" />
           ))}
         </Box>
         <Box
@@ -515,7 +512,7 @@ const BrickBreakerGame: React.FC = () => {
         </Box>
         {/* How to Play button */}
         <Box sx={{ textAlign: 'right', width: '100%', maxWidth: 400, mb: 1 }}>
-          <button onClick={() => setShowOnboarding(true)} style={{ fontSize: '0.95rem', padding: '4px 12px', borderRadius: 6, border: 'none', background: '#0288d1', color: '#fff', cursor: 'pointer' }} aria-label="How to Play">How to Play</button>
+          <button onClick={() => setShowOnboarding(true)} style={{ fontSize: '0.95rem', padding: '4px 12px', borderRadius: 6, border: 'none', background: '#0288d1', color: '#fff', cursor: 'pointer' }} aria-label="how to play">how to play</button>
         </Box>
       </Box>
     </Box>

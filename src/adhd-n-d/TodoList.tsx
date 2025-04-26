@@ -110,10 +110,10 @@ const TodoList: React.FC = () => {
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
         <Typography variant="subtitle1" align="center" gutterBottom sx={{ mt: 2 }}>
-          To-Do List
+          to-do list
         </Typography>
         <Button variant="outlined" color="error" size="small" onClick={() => setConfirmOpen(true)} disabled={todoList.length === 0}>
-          Clear List
+          clear list
         </Button>
       </Box>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -131,13 +131,13 @@ const TodoList: React.FC = () => {
         </Typography>
       )}
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Clear All To-Dos?</DialogTitle>
+        <DialogTitle>clear all to-dos?</DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete all to-do items? This cannot be undone.</Typography>
+          <Typography>are you sure you want to delete all to-do items? this cannot be undone.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} color="primary">Cancel</Button>
-          <Button onClick={() => { clearTodoList(); setConfirmOpen(false); }} color="error" variant="contained">Clear All</Button>
+          <Button onClick={() => setConfirmOpen(false)} color="primary">cancel</Button>
+          <Button onClick={() => { clearTodoList(); setConfirmOpen(false); }} color="error" variant="contained">clear all</Button>
         </DialogActions>
       </Dialog>
     </>

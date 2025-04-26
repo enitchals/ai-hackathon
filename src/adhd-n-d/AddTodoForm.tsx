@@ -17,14 +17,14 @@ const AddTodoForm: React.FC = () => {
   return (
     <Box component="form" onSubmit={handleSubmit} display="flex" gap={1} mt={2} mb={2}>
       <TextField
-        label="Add a to-do item"
+        label="add a to-do item"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         size="small"
         fullWidth
       />
       <Button type="submit" variant="contained" color="primary" sx={{ flexShrink: 0 }}>
-        Add
+        add
       </Button>
     </Box>
   );

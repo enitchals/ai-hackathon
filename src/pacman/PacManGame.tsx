@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ORIGINAL_MAZE, MazeTile } from './mazeData';
 import { PacMan, Ghost, GhostName, Position } from './types';
 import { Card, CardContent, Typography, Box, Dialog, DialogTitle, DialogContent, Button } from '@mui/material';
@@ -343,11 +343,6 @@ const PacManGame: React.FC = () => {
       }, 1500);
     }
   }, [gameState, ghosts, pacman, lives, blinkyMode]);
-
-  // Touch/click handler for mobile start
-  const handleOverlayClick = () => {
-    if (gameState === 'start') handleStart();
-  };
 
   // Helper: can Pac-Man move in a direction?
   function canMove(row: number, col: number, dir: keyof typeof directionOffsets) {
@@ -768,22 +763,24 @@ const PacManGame: React.FC = () => {
       open={gameState === 'start'}
       aria-labelledby="pacman-start-title"
       aria-describedby="pacman-start-desc"
-      disableEscapeKeyDown
+      onClose={() => setGameState('running')}
     >
-      <DialogTitle id="pacman-start-title">Welcome to Pac-Man!</DialogTitle>
+      <DialogTitle id="pacman-start-title">welcome to pac-man!</DialogTitle>
       <DialogContent>
         <Typography id="pacman-start-desc" sx={{ mb: 2 }}>
-          Press <b>Space</b> or <b>Enter</b> or <b>Tap</b> to start.<br />
-          <b>How to play:</b> Eat all pellets, avoid ghosts, use power pellets to eat ghosts for bonus points!
+          press <b>space</b> or <b>enter</b> or <b>tap</b> to start.<br />
+          <b>how to play:</b> eat all pellets, avoid ghosts, use power pellets to eat ghosts for bonus points!
         </Typography>
+        <Typography variant="caption" color="text.secondary" sx={{ mb: 2 }}>say the secret word and the ghosts will be friendly! ;)</Typography>
+        <br/><br/>
         <Button
           ref={onboardingButtonRef}
           variant="contained"
           color="primary"
           onClick={handleOnboardingStart}
-          aria-label="Start Pac-Man"
+          aria-label="start pac-man"
         >
-          Press to Start
+          press to start
         </Button>
       </DialogContent>
     </Dialog>
@@ -794,11 +791,12 @@ const PacManGame: React.FC = () => {
       open={showLevelComplete}
       aria-labelledby="pacman-level-complete-title"
       aria-describedby="pacman-level-complete-desc"
+      onClose={() => setShowLevelComplete(false)}
     >
-      <DialogTitle id="pacman-level-complete-title">Level Complete!</DialogTitle>
+      <DialogTitle id="pacman-level-complete-title">level complete!</DialogTitle>
       <DialogContent>
         <Typography id="pacman-level-complete-desc" sx={{ mb: 2 }}>
-          Get ready for the next level!
+          get ready for the next level!
         </Typography>
       </DialogContent>
     </Dialog>
@@ -809,11 +807,12 @@ const PacManGame: React.FC = () => {
       open={showDeath}
       aria-labelledby="pacman-death-title"
       aria-describedby="pacman-death-desc"
+      onClose={() => setShowDeath(false)}
     >
-      <DialogTitle id="pacman-death-title">Ouch! Pac-Man was caught!</DialogTitle>
+      <DialogTitle id="pacman-death-title">ouch! pac-man was caught!</DialogTitle>
       <DialogContent>
         <Typography id="pacman-death-desc" sx={{ mb: 2 }}>
-          You lost a life. Get ready!
+          you lost a life. get ready!
         </Typography>
       </DialogContent>
     </Dialog>
@@ -824,19 +823,20 @@ const PacManGame: React.FC = () => {
       open={showGameOver}
       aria-labelledby="pacman-gameover-title"
       aria-describedby="pacman-gameover-desc"
+      onClose={() => setShowGameOver(false)}
     >
-      <DialogTitle id="pacman-gameover-title">Game Over</DialogTitle>
+      <DialogTitle id="pacman-gameover-title">game over</DialogTitle>
       <DialogContent>
         <Typography id="pacman-gameover-desc" sx={{ mb: 2 }}>
-          Final Score: {score.toString().padStart(5, '0')}
+          final score: {score.toString().padStart(5, '0')}
         </Typography>
         <Button
           variant="contained"
           color="primary"
           onClick={handleRestart}
-          aria-label="Restart Pac-Man"
+          aria-label="restart pac-man"
         >
-          Restart Game
+          restart game
         </Button>
       </DialogContent>
     </Dialog>
@@ -856,7 +856,7 @@ const PacManGame: React.FC = () => {
           variant="contained"
           size="large"
           sx={{ minWidth: 56, minHeight: 56, borderRadius: '50%', mx: 1 }}
-          aria-label="Up"
+          aria-label="up"
           onClick={() => handleDPad('up')}
         >
           ↑
@@ -867,7 +867,7 @@ const PacManGame: React.FC = () => {
           variant="contained"
           size="large"
           sx={{ minWidth: 56, minHeight: 56, borderRadius: '50%', mx: 1 }}
-          aria-label="Left"
+          aria-label="left"
           onClick={() => handleDPad('left')}
         >
           ←
@@ -877,7 +877,7 @@ const PacManGame: React.FC = () => {
           variant="contained"
           size="large"
           sx={{ minWidth: 56, minHeight: 56, borderRadius: '50%', mx: 1 }}
-          aria-label="Right"
+          aria-label="right"
           onClick={() => handleDPad('right')}
         >
           →
@@ -888,7 +888,7 @@ const PacManGame: React.FC = () => {
           variant="contained"
           size="large"
           sx={{ minWidth: 56, minHeight: 56, borderRadius: '50%', mx: 1 }}
-          aria-label="Down"
+          aria-label="down"
           onClick={() => handleDPad('down')}
         >
           ↓
@@ -975,11 +975,11 @@ const PacManGame: React.FC = () => {
       onTouchEnd={handleTouchEnd}
     >
       {/* Score/lives UI fixed at the top of the card */}
-      <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, background: 'rgba(24,24,24,0.95)', py: 1, px: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', borderTopLeftRadius: 12 }} aria-label="Game status">
+      <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, background: 'rgba(24,24,24,0.95)', py: 1, px: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', borderTopLeftRadius: 12 }} aria-label="game status">
         <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-          <Typography variant="body1" sx={{ color: '#fff' }} aria-label="Score" aria-live="polite">Score: {score.toString().padStart(5, '0')}</Typography>
+          <Typography variant="body1" sx={{ color: '#fff' }} aria-label="score" aria-live="polite">score: {score.toString().padStart(5, '0')}</Typography>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mr: 3 }} aria-label="Lives" aria-live="polite">
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mr: 3 }} aria-label="lives" aria-live="polite">
           {Array.from({ length: lives }).map((_, i) => (
             <span key={i} style={{ display: 'inline-block' }}>
               <PacManStatusSVG direction="right" />
@@ -987,15 +987,15 @@ const PacManGame: React.FC = () => {
           ))}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-          <Typography variant="body1" sx={{ color: '#fff' }} aria-label="Level">Level: {level}</Typography>
+          <Typography variant="body1" sx={{ color: '#fff' }} aria-label="level">level: {level}</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="body1" sx={{ color: '#FFD046' }} aria-label="High Score">High Score: {highScore.toString().padStart(5, '0')}</Typography>
+          <Typography variant="body1" sx={{ color: '#FFD046' }} aria-label="high score">high score: {highScore.toString().padStart(5, '0')}</Typography>
         </Box>
       </Box>
       <CardContent sx={{ pt: 8 }}>
         <Typography variant="h4" align="center" gutterBottom sx={{ color: '#FFD046', fontWeight: 700 }}>
-          Pac-Man
+          pac-man
         </Typography>
         <Box display="flex" justifyContent="center" sx={{ overflowX: 'auto', position: 'relative' }}>
           {StartDialog}
@@ -1016,7 +1016,7 @@ const PacManGame: React.FC = () => {
               overflow: 'hidden',
             }}
             role="region"
-            aria-label="Pac-Man maze"
+            aria-label="pac-man maze"
           >
             {ORIGINAL_MAZE.map((row, rIdx) =>
               row.map((tile, cIdx) => (

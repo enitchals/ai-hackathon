@@ -46,10 +46,10 @@ const TaskModal: React.FC<TaskModalProps> = ({ open, task, onDone, onGiveUp, onC
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center', pb: 3 }}>
         <Button variant="contained" color="success" onClick={onDone} sx={{ minWidth: 120 }}>
-          I DID IT!
+          i did it!
         </Button>
         <Button variant="contained" color="error" onClick={onGiveUp} sx={{ minWidth: 120, ml: 2 }}>
-          I GIVE UP
+          i give up
         </Button>
       </DialogActions>
     </Dialog>

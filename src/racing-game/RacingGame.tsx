@@ -205,7 +205,7 @@ const RacingGame: React.FC = () => {
 
   return (
     <>
-      <AppHeader title="Racing Game" showBackButton showThemePicker />
+      <AppHeader title="racing game" showBackButton showThemePicker />
       <Box
         sx={{
           width: '100vw',
@@ -221,8 +221,8 @@ const RacingGame: React.FC = () => {
         }}
       >
         <Box sx={{ textAlign: 'center', color: 'text.primary', fontSize: 24, mb: 1, display: 'flex', justifyContent: 'center', gap: 3 }}>
-          <Typography variant="h6" sx={{ color: 'text.primary' }}>Score: {score}</Typography>
-          <Typography variant="h6" sx={{ color: 'text.secondary' }}>High: {highScore}</Typography>
+          <Typography variant="h6" sx={{ color: 'text.primary' }}>score: {score}</Typography>
+          <Typography variant="h6" sx={{ color: 'text.secondary' }}>high: {highScore}</Typography>
         </Box>
         <Box
           sx={{
@@ -317,20 +317,20 @@ const RacingGame: React.FC = () => {
               onClick={() => setStarted(true)}
               role="dialog"
               aria-modal="true"
-              aria-label="Start Game"
+              aria-label="start game"
             >
-              <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>Press <b>Space</b> or tap to start!</Typography>
+              <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>press <b>space</b> or tap to start!</Typography>
               <Typography variant="body1" sx={{ mb: 2, color: '#fff' }}>
-                Use <b>arrow keys</b> to move / collect <span role="img" aria-label="coin">💰</span> and <span role="img" aria-label="coin">🪙</span> / avoid <span role="img" aria-label="rock">🪨</span> and <span role="img" aria-label="cow">🐄</span>
+                use <b>arrow keys</b> to move / collect <span role="img" aria-label="coin">💰</span> and <span role="img" aria-label="coin">🪙</span> / avoid <span role="img" aria-label="rock">🪨</span> and <span role="img" aria-label="cow">🐄</span>
               </Typography>
               <Button
                 variant="contained"
                 color="warning"
                 sx={{ fontSize: 20, px: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold', boxShadow: 3 }}
                 onClick={e => { e.stopPropagation(); setStarted(true); }}
-                aria-label="Start Game"
+                aria-label="start game"
               >
-                Start
+                start
               </Button>
             </Box>
           )}
@@ -391,17 +391,17 @@ const RacingGame: React.FC = () => {
         {/* Game Over Overlay */}
         {gameOver && (
           <Box sx={{ textAlign: 'center', mt: 3 }} role="dialog" aria-modal="true" aria-label="Game Over">
-            <Typography variant="h4" sx={{ color: 'error.main', mb: 2 }}>Game Over!</Typography>
-            <Typography variant="h6" sx={{ color: 'text.primary', mb: 1 }}>Score: {score}</Typography>
-            <Typography variant="h6" sx={{ color: 'text.secondary', mb: 2 }}>High: {highScore}</Typography>
+            <Typography variant="h4" sx={{ color: 'error.main', mb: 2 }}>game over!</Typography>
+            <Typography variant="h6" sx={{ color: 'text.primary', mb: 1 }}>score: {score}</Typography>
+            <Typography variant="h6" sx={{ color: 'text.secondary', mb: 2 }}>high: {highScore}</Typography>
             <Button
               variant="contained"
               color="warning"
               sx={{ fontSize: 20, px: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold', boxShadow: 3 }}
               onClick={restartGame}
-              aria-label="Restart Game"
+              aria-label="restart game"
             >
-              Restart
+              restart
             </Button>
           </Box>
         )}

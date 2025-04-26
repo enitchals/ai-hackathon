@@ -499,44 +499,44 @@ const TetrisGame: React.FC = () => {
 
   const GameOverOverlay = (
     <Dialog open={gameState.status === GameStatus.GameOver}>
-      <DialogTitle>Game Over</DialogTitle>
+      <DialogTitle>game over</DialogTitle>
       <DialogContent>
-        <Typography variant="h6" sx={{ mb: 1 }}>Score: {gameState.score}</Typography>
-        <Typography variant="body1">Lines: {gameState.lines}</Typography>
-        <Typography variant="body2" sx={{ mb: 2 }}>High Score: {gameState.highScore}</Typography>
-        <Button variant="contained" onClick={handleRestart}>Restart</Button>
+        <Typography variant="h6" sx={{ mb: 1 }}>score: {gameState.score}</Typography>
+        <Typography variant="body1">lines: {gameState.lines}</Typography>
+        <Typography variant="body2" sx={{ mb: 2 }}>high score: {gameState.highScore}</Typography>
+        <Button variant="contained" onClick={handleRestart}>restart</Button>
       </DialogContent>
     </Dialog>
   );
 
   // Side panel UI
   const SidePanel = (
-    <Paper elevation={2} sx={{ p: 2, minWidth: 120, bgcolor: 'background.paper', borderRadius: 3, mb: 2 }} aria-label="Tetris sidebar" role="complementary">
+    <Paper elevation={2} sx={{ p: 2, minWidth: 120, bgcolor: 'background.paper', borderRadius: 3, mb: 2 }} aria-label="tetris sidebar" role="complementary">
       <Stack spacing={2} alignItems="center">
         <Box>
-          <Typography variant="subtitle2" color="text.secondary">Hold</Typography>
+          <Typography variant="subtitle2" color="text.secondary">hold</Typography>
           {renderMiniTetromino(gameState.holdTetromino)}
         </Box>
         <Box>
-          <Typography variant="subtitle2" color="text.secondary">Next</Typography>
+          <Typography variant="subtitle2" color="text.secondary">next</Typography>
           {gameState.nextTetrominoes.slice(0, 3).map((type, i) => (
             <Box key={i} sx={{ mb: 0.5 }}>{renderMiniTetromino(type)}</Box>
           ))}
         </Box>
         <Box aria-live="polite" aria-atomic="true">
-          <Typography variant="subtitle2" color="text.secondary">Score</Typography>
+          <Typography variant="subtitle2" color="text.secondary">score</Typography>
           <Typography variant="h6">{gameState.score}</Typography>
         </Box>
         <Box aria-live="polite" aria-atomic="true">
-          <Typography variant="subtitle2" color="text.secondary">Level</Typography>
+          <Typography variant="subtitle2" color="text.secondary">level</Typography>
           <Typography variant="h6">{gameState.level}</Typography>
         </Box>
         <Box aria-live="polite" aria-atomic="true">
-          <Typography variant="subtitle2" color="text.secondary">Lines</Typography>
+          <Typography variant="subtitle2" color="text.secondary">lines</Typography>
           <Typography variant="h6">{gameState.lines}</Typography>
         </Box>
         <Box>
-          <Typography variant="subtitle2" color="text.secondary">High Score</Typography>
+          <Typography variant="subtitle2" color="text.secondary">high score</Typography>
           <Typography variant="h6">{gameState.highScore}</Typography>
         </Box>
       </Stack>
@@ -545,7 +545,7 @@ const TetrisGame: React.FC = () => {
 
   // On-screen controls for mobile (4-button keypad layout)
   const Controls = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }} aria-label="Tetris controls" role="group">
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }} aria-label="tetris controls" role="group">
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, mb: 1 }}>
         <Button variant="contained" size="small" aria-label="Rotate" onClick={() => setGameState(prev => {
           if (prev.status !== GameStatus.Running) return prev;
@@ -631,7 +631,7 @@ const TetrisGame: React.FC = () => {
         <Button variant="contained" size="small" aria-label="Pause" onClick={doPause}><PauseIcon /></Button>
       </Box>
       <Typography variant="caption" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
-        Controls: ← → ▼ ⟳ (rotate) ⏬ (hard drop) Hold (H) Pause (P/Esc)
+        controls: ← → ▼ ⟳ (rotate) ⏬ (hard drop) hold (h) pause (p/esc)
       </Typography>
     </Box>
   );
@@ -639,9 +639,9 @@ const TetrisGame: React.FC = () => {
   // Pause overlay
   const PauseOverlay = (
     <Dialog open={showPause || gameState.status === GameStatus.Paused} onClose={doResume}>
-      <DialogTitle>Paused</DialogTitle>
+      <DialogTitle>paused</DialogTitle>
       <DialogContent>
-        <Button variant="contained" onClick={doResume} startIcon={<PlayArrowIcon />}>Resume</Button>
+        <Button variant="contained" onClick={doResume} startIcon={<PlayArrowIcon />}>resume</Button>
       </DialogContent>
     </Dialog>
   );
@@ -654,18 +654,18 @@ const TetrisGame: React.FC = () => {
       aria-describedby="tetris-onboarding-desc"
       disableEscapeKeyDown
     >
-      <DialogTitle id="tetris-onboarding-title">Welcome to Tetris!</DialogTitle>
+      <DialogTitle id="tetris-onboarding-title">welcome to tetris!</DialogTitle>
       <DialogContent>
         <Typography id="tetris-onboarding-desc" sx={{ mb: 2 }}>
-          <b>How to play:</b><br />
-          - Move: <b>← →</b> (arrows or on-screen buttons)<br />
-          - Rotate: <b>↑</b> or <b>X</b> (or ⟳ button)<br />
-          - Soft Drop: <b>↓</b> (or ▼ button)<br />
-          - Hard Drop: <b>Space</b> (or ⏬ button)<br />
-          - Hold: <b>H</b> (or Hold button)<br />
-          - Pause: <b>P</b> or <b>Esc</b><br />
+          <b>how to play:</b><br />
+          - move: <b>← →</b> (arrows or on-screen buttons)<br />
+          - rotate: <b>↑</b> or <b>x</b> (or ⟳ button)<br />
+          - soft drop: <b>↓</b> (or ▼ button)<br />
+          - hard drop: <b>space</b> (or ⏬ button)<br />
+          - hold: <b>h</b> (or hold button)<br />
+          - pause: <b>p</b> or <b>esc</b><br />
           <br />
-          <b>Goal:</b> Clear lines for points. Game speeds up as you level up!
+          <b>goal:</b> clear lines for points. game speeds up as you level up!
         </Typography>
         <Button
           ref={onboardingButtonRef}
@@ -674,10 +674,10 @@ const TetrisGame: React.FC = () => {
           onClick={handleStart}
           aria-label="Start Tetris"
         >
-          Press to Start
+          press to start
         </Button>
         <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
-          (You can also press <b>Space</b> or <b>Enter</b> to start)
+          (you can also press <b>space</b> or <b>enter</b> to start)
         </Typography>
       </DialogContent>
     </Dialog>
@@ -685,7 +685,7 @@ const TetrisGame: React.FC = () => {
 
   return (
     <Box sx={{ width: '100vw', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'auto' }}>
-      <AppHeader title="Tetris" />
+      <AppHeader title="tetris" />
       <Box
         sx={{
           display: 'flex',

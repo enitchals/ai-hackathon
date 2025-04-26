@@ -11,7 +11,7 @@ const DoneList: React.FC = () => {
     return (
       <Box mt={2}>
         <Typography variant="body2" color="text.secondary" align="center">
-          No completed tasks yet.
+          no completed tasks yet.
         </Typography>
       </Box>
     );
@@ -21,10 +21,10 @@ const DoneList: React.FC = () => {
     <Box mt={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
         <Typography variant="subtitle1" align="center" gutterBottom>
-          Done List
+          done list
         </Typography>
         <Button variant="outlined" color="error" size="small" onClick={clearDoneList}>
-          Clear List
+          clear list
         </Button>
       </Box>
       <List role="list" aria-label="Completed Tasks List">

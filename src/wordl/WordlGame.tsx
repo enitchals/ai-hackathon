@@ -282,7 +282,7 @@ export default function WordlGame() {
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', minHeight: '100dvh', overflow: 'hidden', '@media (max-width: 600px)': { height: '100dvh', minHeight: '100dvh', overflow: 'hidden' } }}>
-      <AppHeader title="Wordl" />
+      <AppHeader title="wordl" />
       <Box
         sx={{
           flexGrow: 1,
@@ -309,14 +309,14 @@ export default function WordlGame() {
             onClick={handleCloseOnboarding}
             role="dialog"
             aria-modal="true"
-            aria-label="How to Play Instructions"
+            aria-label="how to play instructions"
           >
             <Box ref={onboardingRef} tabIndex={-1} sx={{ bgcolor: theme.palette.background.paper, p: 4, borderRadius: 2, minWidth: 320, maxWidth: 400, boxShadow: 8 }} onClick={e => e.stopPropagation()}>
-              <Typography variant="h5" sx={{ mb: 2 }}>How to Play</Typography>
+              <Typography variant="h5" sx={{ mb: 2 }}>how to play</Typography>
               <Typography sx={{ mb: 2 }}>
-                Guess the <b>5-letter word</b> in 6 tries.<br /><br />
-                Each guess must be a valid 5-letter word. Hit <b>Enter</b> to submit.<br /><br />
-                After each guess, the color of the tiles will show how close your guess was to the word:
+                guess the <b>5-letter word</b> in 6 tries.<br /><br />
+                each guess must be a valid 5-letter word. hit <b>enter</b> to submit.<br /><br />
+                after each guess, the color of the tiles will show how close your guess was to the word:
               </Typography>
               <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                 <Box sx={{ width: 36, height: 36, bgcolor: '#6AAA64', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 1, fontWeight: 'bold' }}>G</Box>
@@ -331,11 +331,11 @@ export default function WordlGame() {
                 <Typography sx={{ alignSelf: 'center' }}>= not in the word</Typography>
               </Box>
               <Typography sx={{ mb: 2 }}>
-                Use your keyboard or tap the on-screen keys.<br />
-                Your stats are tracked locally.
+                use your keyboard or tap the on-screen keys.<br />
+                your stats are tracked locally.
               </Typography>
               <Box sx={{ textAlign: 'right', mt: 2 }}>
-                <button onClick={handleCloseOnboarding} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: theme.palette.primary.main, color: theme.palette.primary.contrastText, cursor: 'pointer' }} aria-label="Start Playing">Start Playing</button>
+                <button onClick={handleCloseOnboarding} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: theme.palette.primary.main, color: theme.palette.primary.contrastText, cursor: 'pointer' }} aria-label="start playing">start playing</button>
               </Box>
             </Box>
           </Box>
@@ -348,15 +348,15 @@ export default function WordlGame() {
             .map((_, idx) => renderRow('', undefined, gameState.guesses.length + 1 + idx))}
         </Box>
         <div aria-live="polite" style={{ position: 'absolute', left: -9999, top: 'auto', width: 1, height: 1, overflow: 'hidden' }}>
-          {gameState.gameOver ? (gameState.won ? 'You won!' : `Game Over! The word was ${gameState.targetWord}`) : ''}
+          {gameState.gameOver ? (gameState.won ? 'you won!' : `game over! the word was ${gameState.targetWord}`) : ''}
         </div>
         {gameState.gameOver && (
           <>
             <Typography variant="h5" sx={{ mb: 2 }} aria-live="polite">
-              {gameState.won ? 'You won! 🎉' : `Game Over! The word was ${gameState.targetWord}`}
+              {gameState.won ? 'you won! 🎉' : `game over! the word was ${gameState.targetWord}`}
             </Typography>
             <Box sx={{ mb: 2 }}>
-              <button onClick={() => setShowStats(true)} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: theme.palette.primary.main, color: theme.palette.primary.contrastText, cursor: 'pointer' }} aria-label="Show Stats">Show Stats</button>
+              <button onClick={() => setShowStats(true)} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: theme.palette.primary.main, color: theme.palette.primary.contrastText, cursor: 'pointer' }} aria-label="show stats">show stats</button>
             </Box>
           </>
         )}
@@ -377,29 +377,29 @@ export default function WordlGame() {
             onClick={() => setShowStats(false)}
             role="dialog"
             aria-modal="true"
-            aria-label="Statistics"
+            aria-label="statistics"
           >
             <Box ref={statsRef} tabIndex={-1} sx={{ bgcolor: theme.palette.background.paper, p: 4, borderRadius: 2, minWidth: 320 }} onClick={e => e.stopPropagation()}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Statistics</Typography>
+              <Typography variant="h6" sx={{ mb: 2 }}>statistics</Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Box textAlign="center">
                   <Typography variant="h4">{stats.gamesPlayed}</Typography>
-                  <Typography variant="body2">Played</Typography>
+                  <Typography variant="body2">played</Typography>
                 </Box>
                 <Box textAlign="center">
                   <Typography variant="h4">{stats.gamesWon}</Typography>
-                  <Typography variant="body2">Wins</Typography>
+                  <Typography variant="body2">wins</Typography>
                 </Box>
                 <Box textAlign="center">
                   <Typography variant="h4">{stats.currentStreak}</Typography>
-                  <Typography variant="body2">Current Streak</Typography>
+                  <Typography variant="body2">current streak</Typography>
                 </Box>
                 <Box textAlign="center">
                   <Typography variant="h4">{stats.maxStreak}</Typography>
-                  <Typography variant="body2">Max Streak</Typography>
+                  <Typography variant="body2">max streak</Typography>
                 </Box>
               </Box>
-              <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>Guess Distribution</Typography>
+              <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>guess distribution</Typography>
               <Box>
                 {stats.guessDistribution.map((count: number, i: number) => (
                   <Box key={i} sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
@@ -410,7 +410,7 @@ export default function WordlGame() {
                 ))}
               </Box>
               <Box sx={{ textAlign: 'right', mt: 2 }}>
-                <button onClick={() => setShowStats(false)} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: theme.palette.secondary.main, color: theme.palette.secondary.contrastText, cursor: 'pointer' }} aria-label="Close Stats">Close</button>
+                <button onClick={() => setShowStats(false)} style={{ fontSize: '1rem', padding: '6px 16px', borderRadius: 6, border: 'none', background: theme.palette.secondary.main, color: theme.palette.secondary.contrastText, cursor: 'pointer' }} aria-label="close stats">close</button>
               </Box>
             </Box>
           </Box>
@@ -537,7 +537,7 @@ export default function WordlGame() {
           })()}
         </Box>
         <Box sx={{ textAlign: 'right', width: '100%', maxWidth: 400, mb: 1 }}>
-          <button onClick={() => setShowOnboarding(true)} style={{ fontSize: '0.95rem', padding: '4px 12px', borderRadius: 6, border: 'none', background: theme.palette.info.main, color: theme.palette.info.contrastText, cursor: 'pointer' }} aria-label="How to Play">How to Play</button>
+          <button onClick={() => setShowOnboarding(true)} style={{ fontSize: '0.95rem', padding: '4px 12px', borderRadius: 6, border: 'none', background: theme.palette.info.main, color: theme.palette.info.contrastText, cursor: 'pointer' }} aria-label="how to play">how to play</button>
         </Box>
       </Box>
     </Box>
