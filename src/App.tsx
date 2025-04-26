@@ -93,7 +93,7 @@ function Gallery() {
             sx={{ fontWeight: 'bold', px: 4, fontSize: '1.1rem' }}
             onClick={() => setThemeModalOpen(true)}
           >
-            choose theme
+            theme
           </Button>
           <Button
             variant="outlined"
